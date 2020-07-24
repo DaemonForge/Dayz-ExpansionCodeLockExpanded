@@ -4,6 +4,9 @@ Allows you to use Expansion Code Locks on Tents and on Vanilla Gates
 Also works with Base Building Plus
 (With Known non critical Bug See known issues below)
 
+#### Link to published mod: 
+[https://steamcommunity.com/sharedfiles/filedetails/?id=2173711903](https://steamcommunity.com/sharedfiles/filedetails/?id=2173711903)
+
 It also allows for raiding of tents with a hacksaw, with a config file to help you adjust the raiding to your liking
 
 ## Raiding Config
