@@ -1,6 +1,10 @@
 class ActionRemoveExpansionCodeLockExpandedCB : ActionContinuousBaseCB {
     override void CreateActionComponent() {
+<<<<<<< HEAD
 		float circleTime = 10; 
+=======
+	float circleTime = 15; 
+>>>>>>> dbcd7fdd7f049fdd0edf64bf2bd7e7fc89d7ffba
       	m_ActionData.m_ActionComponent = new CAContinuousRepeat(circleTime);
     }
 }
@@ -24,6 +28,7 @@ class ActionRemoveExpansionCodeLockExpanded : ActionContinuousBase {
     }
 
     override bool ActionCondition(PlayerBase player, ActionTarget target, ItemBase item) {
+<<<<<<< HEAD
 		ItemBase m_TargetItem;
 		if (TentBase.Cast(target.GetParent())){
 			m_TargetItem = ItemBase.Cast(target.GetParent());
@@ -63,5 +68,25 @@ class ActionRemoveExpansionCodeLockExpanded : ActionContinuousBase {
 				m_TargetItem.GetInventory().DropEntity(InventoryMode.SERVER, m_TargetItem, codelock);
 			}
 		}
+=======
+		ItemBase itemParent = ItemBase.Cast(target.GetParent());
+		ExpansionCarAdminKey key = ExpansionCarAdminKey.Cast(item);
+	
+	        if (itemParent && key) {
+			if (itemParent.IsLocked() || ExpansionCodeLock.Cast(itemParent.FindAttachmentBySlotName( "Att_ExpansionCodeLock" )) || itemParent.HasCode()) {
+				return true;
+			}
+		}
+    }
+
+    override void OnFinishProgressServer(ActionData action_data) {
+        ItemBase itemParent = ItemBase.Cast(action_data.m_Target.GetParent());
+	itemParent.Unlock();
+	itemParent.SetCode("");
+	ExpansionCodeLock codelock = ExpansionCodeLock.Cast(itemParent.FindAttachmentBySlotName( "Att_ExpansionCodeLock" ));
+	if(codelock){
+		itemParent.GetInventory().DropEntity(InventoryMode.SERVER, itemParent, codelock);
+	}
+>>>>>>> dbcd7fdd7f049fdd0edf64bf2bd7e7fc89d7ffba
     }
 }
