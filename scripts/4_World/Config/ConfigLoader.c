@@ -5,13 +5,14 @@ static string ExpansionCodeLockPATH = "$profile:\\ExpansionCodeLockExpanded.json
 class ExpansionCodeLockConfig
 { 
 	//Default Values
-	string ConfigVersion = "1";
+	string ConfigVersion = "2";
 	bool AllowCodeLocksOnTents = true;
 	bool AllowRaiding = true;
 	float RaidTime = 600;
 	float RaidIncrements = 5;
 	
 	float HackSawDamage = 300;
+	bool ScriptLogging = true;
 		
 	
 	void ExpansionCodeLockConfig()
@@ -25,11 +26,17 @@ class ExpansionCodeLockConfig
 			if (FileExist(ExpansionCodeLockPATH)) //If config exist load File
 			{
 				JsonFileLoader<ExpansionCodeLockConfig>.JsonLoadFile(ExpansionCodeLockPATH, this);
-				if(!ConfigVersion){
+				if (!ConfigVersion){
 					ConfigVersion = "1";
 					AllowCodeLocksOnTents = true;
 					JsonFileLoader<ExpansionCodeLockConfig>.JsonSaveFile(ExpansionCodeLockPATH, this);
 				}
+				if (ConfigVersion != "2"){
+					ConfigVersion = "2";
+					ScriptLogging = true;
+					JsonFileLoader<ExpansionCodeLockConfig>.JsonSaveFile(ExpansionCodeLockPATH, this);
+				}
+				
 			}else{ //File does not exist create file
 				JsonFileLoader<ExpansionCodeLockConfig>.JsonSaveFile(ExpansionCodeLockPATH, this);
 			}

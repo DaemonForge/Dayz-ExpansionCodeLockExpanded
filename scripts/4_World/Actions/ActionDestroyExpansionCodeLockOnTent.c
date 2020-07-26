@@ -57,8 +57,9 @@ class ActionDestroyExpansionCodeLockOnTent : ActionContinuousBase {
 
         if (tent) {
             ExpansionCodeLock codelock = ExpansionCodeLock.Cast(tent.FindAttachmentBySlotName( "Att_ExpansionCodeLock" ));
-
-            if (codelock) {
+			PlayerBase sourcePlayer = PlayerBase.Cast(action_data.m_Player);
+			
+            if (codelock && sourcePlayer) {
                 codelock.AddHealth("", "Health", -raidIncrementAmount);
 
                 float m_Health = codelock.GetHealth("", "");
@@ -69,13 +70,15 @@ class ActionDestroyExpansionCodeLockOnTent : ActionContinuousBase {
                     tent.SetCode( "" );
 					tent.GetInventory().DropEntity(InventoryMode.SERVER, tent, codelock);
 					#ifdef HEROESANDBANDITSMOD
-						PlayerBase sourcePlayer = PlayerBase.Cast(action_data.m_Player);
 						if (sourcePlayer){
 							string sourcePlayerID = sourcePlayer.GetIdentity().GetPlainId();
 							GetHeroesAndBandits().NewPlayerAction(sourcePlayerID, "ExpansionCodeLockTentRaid");
 						}
 					#endif
-                    action_data.m_MainItem.DecreaseHealth(toolDamage, false);
+					if (GetExpansionCodeLockConfig().ScriptLogging){
+						Print("[CodeLockExpanded][Raid] " + sourcePlayer.GetIdentity().GetName() + "(" +  sourcePlayer.GetIdentity().GetPlainId() + ") Raided  " + tent.GetType() + " at " + tent.GetPosition());
+					}
+					action_data.m_MainItem.DecreaseHealth(toolDamage, false);
                 }
             }
         }
