@@ -82,7 +82,7 @@ modded class Fence {
 	
 	override bool HasCodeLock( string selection )
 	{
-		ExpansionCodeLock codelock = ExpansionCodeLock.Cast(FindAttachmentBySlotName( "Att_CombinationLock" )) 
+		ExpansionCodeLock codelock = ExpansionCodeLock.Cast(FindAttachmentBySlotName( "Att_CombinationLock" )) ;
 		if ( codelock ) //check if attachment is code lock
 		{
 			return true;

@@ -192,10 +192,6 @@ modded class TentBase {
 		ctx.Write( m_IsOpened4 );
 		ctx.Write( m_IsOpened5 );
 		ctx.Write( m_IsOpened6 );
-		
-		if (m_State == PITCHED){ //Just to ensure that the data is synced :)
-			SetSynchDirty();
-		}
 	}
 
 
@@ -205,61 +201,80 @@ modded class TentBase {
 		{
 			return false;
 		}
-		
+		bool loadingsuccessfull = true;
 		if ( !ctx.Read( m_Locked ) )
 		{
-			return false;
+			m_Locked = false;
+			loadingsuccessfull = false;
 		}
 		
 		if ( !ctx.Read( m_Code ) )
 		{
-			return false;
+			m_Code = "";
+			loadingsuccessfull = false;
 		}
 
 		if ( !ctx.Read( m_HasCode ) )
 		{
-			return false;
+			m_HasCode = false;
+			loadingsuccessfull = false;
 		}
 		
 		if ( !ctx.Read( m_IsOpened ) )
 		{
-			return false;
+			m_IsOpened = true;
+			loadingsuccessfull = false;
 		}
 		
 		if ( !ctx.Read( m_IsOpened1 ) )
 		{
-			return false;
+			m_IsOpened1 = true;
+			loadingsuccessfull = false;
 		}
 		
 		if ( !ctx.Read( m_IsOpened2 ) )
 		{
-			return false;
+			m_IsOpened2 = true;
+			loadingsuccessfull = false;
 		}
 		
 		if ( !ctx.Read( m_IsOpened3 ) )
 		{
-			return false;
+			m_IsOpened3 = true;
+			loadingsuccessfull = false;
 		}
 		
 		if ( !ctx.Read( m_IsOpened4 ) )
 		{
-			return false;
+			m_IsOpened4 = true;
+			loadingsuccessfull = false;
 		}
 			
 		if ( !ctx.Read( m_IsOpened5 ) )
 		{
-			return false;
+			m_IsOpened5 = true;
+			loadingsuccessfull = false;
 		}
 		
 		if ( !ctx.Read( m_IsOpened6 ) )
 		{
-			return false;
+			m_IsOpened6 = true;
+			loadingsuccessfull = false;
 		}	
 		
 		SetSynchDirty();
 
-		return true;
+		return loadingsuccessfull;
 	}
+	
+	override bool CanDisplayAttachmentCategory(string category_name) {
+		
+        if (category_name == "Attachments" && GetExpansionCodeLockConfig()) {
+            return GetExpansionCodeLockConfig().AllowCodeLocksOnTents;
+        }
+
+        return super.CanDisplayAttachmentCategory(category_name);
+    }
 	
 	override void EEItemDetached(EntityAI item, string slot_name)
 	{

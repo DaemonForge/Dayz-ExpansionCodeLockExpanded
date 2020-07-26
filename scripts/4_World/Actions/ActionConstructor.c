@@ -4,6 +4,7 @@ modded class ActionConstructor
 	{
 		super.RegisterActions( actions );	
 		actions.Insert( ActionDestroyExpansionCodeLockOnTent );
+		actions.Insert( ActionRemoveExpansionCodeLockExpanded );
 
 	}
 }
