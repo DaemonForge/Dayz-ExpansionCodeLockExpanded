@@ -42,7 +42,7 @@ class ActionRemoveExpansionCodeLockExpanded : ActionContinuousBase {
 		itemParent.SetCode("");
 		ExpansionCodeLock codelock = ExpansionCodeLock.Cast(itemParent.FindAttachmentBySlotName( "Att_ExpansionCodeLock" ));
 		if(codelock){
-			tent.GetInventory().DropEntity(InventoryMode.SERVER, itemParent, codelock);
+			itemParent.GetInventory().DropEntity(InventoryMode.SERVER, itemParent, codelock);
 		}
     }
 }
