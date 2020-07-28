@@ -65,23 +65,29 @@ modded class TentBase {
 	}
 	
 	override bool CanReceiveItemIntoCargo(EntityAI cargo) {
-        if (m_Locked){
-            return false;
-        }
+        if (m_Locked && GetExpansionCodeLockConfig()){
+			if (GetExpansionCodeLockConfig().AllowCodeLocksOnTents){
+           	 	return false;
+			}
+		}
         return super.CanReleaseCargo(cargo);
     }
 
 
     override bool CanReleaseCargo(EntityAI cargo) {
-        if (m_Locked){
-            return false;
+        if (m_Locked && GetExpansionCodeLockConfig()){
+			if (GetExpansionCodeLockConfig().AllowCodeLocksOnTents){
+           	 	return false;
+			}
 		}
         return super.CanReleaseCargo(cargo);
     }
 
     override bool CanReceiveAttachment(EntityAI attachment, int slotId) {
-        if (m_Locked){
-            return false;
+        if (m_Locked && GetExpansionCodeLockConfig()){
+			if (GetExpansionCodeLockConfig().AllowCodeLocksOnTents){
+           	 	return false;
+			}
 		}
         return super.CanReceiveAttachment(attachment, slotId);
     }
@@ -89,8 +95,10 @@ modded class TentBase {
 	
 	override bool CanReleaseAttachment( EntityAI attachment )
 	{
-		if (m_Locked){
-            return false;
+		if (m_Locked && GetExpansionCodeLockConfig()){
+			if (GetExpansionCodeLockConfig().AllowCodeLocksOnTents){
+           	 	return false;
+			}
 		}
         return super.CanReleaseAttachment(attachment);
 	}
@@ -157,13 +165,17 @@ modded class TentBase {
 	
 	override bool HasCodeLock( string selection )
 	{
-		if ( FindAttachmentBySlotName( "Att_ExpansionCodeLock" ) )
+		if ( ExpansionCodeLock.Cast(FindAttachmentBySlotName( "Att_ExpansionCodeLock" )) )
 		{
 			return true;
 		}
 		return false;
 	}
 	
+	override ExpansionCodeLock GetCodeLock()
+	{
+		return ExpansionCodeLock.Cast(FindAttachmentBySlotName( "Att_ExpansionCodeLock" ));
+	}
 		
 	override bool IsLocked()
 	{
@@ -177,6 +189,7 @@ modded class TentBase {
 		}
 		return super.CanBePacked();
 	}
+
 
 	override void OnStoreSave(ParamsWriteContext ctx)
 	{
@@ -262,9 +275,35 @@ modded class TentBase {
 			loadingsuccessfull = false;
 		}	
 		
+		if (!GetExpansionCodeLockConfig().AllowCodeLocksOnTents){ //If Code Locks on the tents it will remove them Just calling later so simplify and ensure that the code lock has been created
+				GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater( this.ExpansionCodeLockRemove, 1000, false );
+		}
+		
 		SetSynchDirty();
-
+		
 		return loadingsuccessfull;
+	}
+	
+	void ExpansionCodeLockRemove(){
+		if (!GetExpansionCodeLockConfig().AllowCodeLocksOnTents){
+			if (m_Locked || m_HasCode || HasCodeLock("codelock") ){
+				m_Locked = false;
+				m_Code = "";
+				m_HasCode = false;
+				Print("[ExpansionCodeLock] Reseting " + GetType() + " at " + GetPosition());
+				ExpansionCodeLock codelock = ExpansionCodeLock.Cast(FindAttachmentBySlotName( "Att_ExpansionCodeLock" ));
+				if (codelock){
+					Print("[ExpansionCodeLock] Deleteing Code Lock off Attachment Slot in " + GetType() + " at " + GetPosition());
+					codelock.Delete();
+				}
+				ExpansionCodeLock codelock2 = ExpansionCodeLock.Cast(GetAttachmentByConfigTypeName("ExpansionCodeLock"));
+				if (codelock2){
+					Print("[ExpansionCodeLock] Deleteing Code Lock off Attachment by type " + GetType() + " at " + GetPosition());
+					codelock2.Delete();
+				}
+				SetSynchDirty();
+			}
+		}
 	}
 	
 	override bool CanDisplayAttachmentCategory(string category_name) {

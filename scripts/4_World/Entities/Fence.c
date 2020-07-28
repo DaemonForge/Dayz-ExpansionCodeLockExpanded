@@ -90,6 +90,10 @@ modded class Fence {
 		return super.HasCodeLock( selection );
 	}
 	
+	override ExpansionCodeLock GetCodeLock()
+	{
+		return ExpansionCodeLock.Cast(FindAttachmentBySlotName( "Att_CombinationLock" ));
+	}
 		
 	override bool IsLocked()
 	{
