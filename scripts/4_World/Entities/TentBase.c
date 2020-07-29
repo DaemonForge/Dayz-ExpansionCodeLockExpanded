@@ -118,6 +118,10 @@ modded class TentBase {
 		if ( m_HasCode )
 		{
 			m_Locked = true;
+			if ( !GetGame().IsServer()  ||  !GetGame().IsMultiplayer() ) // client side
+			{
+				//m_Sound = SEffectManager.PlaySound("Expansion_CodeLock_Locks_SoundSet", GetPosition());
+			}
 		}
 
 		SetSynchDirty();
@@ -126,13 +130,19 @@ modded class TentBase {
 	override void Unlock()
 	{
 		m_Locked = false;
-
+		if ( !GetGame().IsServer()  ||  !GetGame().IsMultiplayer() ) // client side
+		{
+			m_Sound = SEffectManager.PlaySound("Expansion_CodeLock_Unlock_SoundSet", GetPosition());
+		}
 		SetSynchDirty();
 	}	
 	
 	override void FailedUnlock()
 	{
-		
+		if ( !GetGame().IsServer()  ||  !GetGame().IsMultiplayer() ) // client side
+		{
+			m_Sound = SEffectManager.PlaySound("Expansion_Shocks_SoundSet", GetPosition());
+		}
 	}
 	
 	override void SetCode( string code )
@@ -275,7 +285,7 @@ modded class TentBase {
 			loadingsuccessfull = false;
 		}	
 		
-		if (!GetExpansionCodeLockConfig().AllowCodeLocksOnTents){ //If Code Locks on the tents it will remove them Just calling later so simplify and ensure that the code lock has been created
+		if (loadingsuccessfull && !GetExpansionCodeLockConfig().AllowCodeLocksOnTents){ //If Code Locks on the tents it will remove them Just calling later so simplify and ensure that the code lock has been created
 				GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater( this.ExpansionCodeLockRemove, 1000, false );
 		}
 		
