@@ -2,7 +2,7 @@ modded class ActionToggleTentOpen {
     override bool ActionCondition(PlayerBase player, ActionTarget target, ItemBase item) {
         TentBase tent = TentBase.Cast(target.GetParent());
         if (tent) {
-            if ( tent.IsLocked() ) { 
+            if ( tent.IsLocked()  && GetExpansionCodeLockConfig().AllowCodeLocksOnTents ) { 
 				return false; 
 			}
         }
