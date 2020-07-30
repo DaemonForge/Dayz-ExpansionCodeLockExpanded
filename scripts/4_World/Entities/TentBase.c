@@ -181,12 +181,14 @@ modded class TentBase {
 		}
 		return false;
 	}
-	
+
+	/* Not available till current experimental release
 	override ExpansionCodeLock GetCodeLock()
 	{
 		return ExpansionCodeLock.Cast(FindAttachmentBySlotName( "Att_ExpansionCodeLock" ));
 	}
-		
+	*/	
+
 	override bool IsLocked()
 	{
 		return m_HasCode && m_Locked;
