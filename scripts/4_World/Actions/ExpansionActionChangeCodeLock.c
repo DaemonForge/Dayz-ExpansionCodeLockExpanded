@@ -7,7 +7,7 @@ modded class ExpansionActionChangeCodeLock
 	{
 		TentBase tent = TentBase.Cast( target.GetParent() );
 
-		if ( tent )
+		if ( tent && GetExpansionCodeLockConfig().AllowCodeLocksOnTents)
 		{
 			m_Target = ItemBase.Cast( target.GetParent() );
 			if ( m_Target )
