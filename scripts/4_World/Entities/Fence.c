@@ -89,12 +89,14 @@ modded class Fence {
 		}
 		return super.HasCodeLock( selection );
 	}
-	
+
+	/* Not available till next experimental version
 	override ExpansionCodeLock GetCodeLock()
 	{
 		return ExpansionCodeLock.Cast(FindAttachmentBySlotName( "Att_CombinationLock" ));
 	}
-		
+	*/
+
 	override bool IsLocked()
 	{
 		if ( m_Locked ) 
