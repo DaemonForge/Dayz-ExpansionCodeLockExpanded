@@ -1,4 +1,4 @@
-modded class ExpansionWallBase
+modded class ExpansionWallBase extends ExpansionBaseBuilding
 {
 	override bool HasCodeLock( string selection )
 	{

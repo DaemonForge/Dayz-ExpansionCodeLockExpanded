@@ -1,4 +1,5 @@
-modded class ActionToggleTentOpen {
+modded class ActionToggleTentOpen : ActionInteractBase
+{
     override bool ActionCondition(PlayerBase player, ActionTarget target, ItemBase item) {
         TentBase tent = TentBase.Cast(target.GetParent());
         if (tent) {

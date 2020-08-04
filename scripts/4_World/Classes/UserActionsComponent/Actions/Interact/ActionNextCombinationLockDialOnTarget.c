@@ -1,4 +1,4 @@
-modded class ActionNextCombinationLockDialOnTarget
+modded class ActionNextCombinationLockDialOnTarget: ActionInteractBase
 {
 	override bool ActionCondition( PlayerBase player, ActionTarget target, ItemBase item )
 	{	

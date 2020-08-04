@@ -1,4 +1,5 @@
-modded class Fence {
+modded class Fence extends BaseBuildingBase
+{
 	
 	protected bool m_Locked = false;
 	protected string m_Code = "";

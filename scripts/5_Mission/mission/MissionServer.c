@@ -1,4 +1,4 @@
-modded class MissionServer
+modded class MissionServer extends MissionBase
 {
 	override void OnInit()
 	{

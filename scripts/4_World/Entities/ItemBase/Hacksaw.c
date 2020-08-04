@@ -1,4 +1,4 @@
-modded class Hacksaw
+modded class Hacksaw extends ToolBase
 {
     override void SetActions()
 	{

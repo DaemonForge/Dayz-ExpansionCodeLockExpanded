@@ -1,4 +1,4 @@
-modded class ActionDialCombinationLockOnTarget
+modded class ActionDialCombinationLockOnTarget: ActionContinuousBase
 {
 	override bool ActionCondition( PlayerBase player, ActionTarget target, ItemBase item )
 	{

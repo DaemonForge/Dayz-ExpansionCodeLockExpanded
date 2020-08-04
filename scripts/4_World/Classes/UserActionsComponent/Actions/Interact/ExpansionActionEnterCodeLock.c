@@ -1,4 +1,4 @@
-modded class ExpansionActionChangeCodeLock
+modded class ExpansionActionEnterCodeLock: ActionInteractBase
 {
 	// -----------------------------------------------------------
 	// Override ActionCondition
@@ -7,13 +7,15 @@ modded class ExpansionActionChangeCodeLock
 	{
 		TentBase tent = TentBase.Cast( target.GetParent() );
 
-		if ( tent && GetExpansionCodeLockConfig().AllowCodeLocksOnTents)
+		if ( tent  && GetExpansionCodeLockConfig().AllowCodeLocksOnTents )
 		{
 			m_Target = ItemBase.Cast( target.GetParent() );
 			if ( m_Target )
 			{
-				if (m_Target.HasCode() && !m_Target.IsOpened() && !m_Target.IsLocked())
-				{
+				string selection = m_Target.GetActionComponentName( target.GetComponentIndex() );
+				if (m_Target.HasCodeLock( selection ) && !m_Target.IsOpened()){
+					return true;
+				} else if (m_Target.IsLocked() || (m_Target.HasCode() && !m_Target.IsOpened())){
 					return true;
 				}
 			}		

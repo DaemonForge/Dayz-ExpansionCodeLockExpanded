@@ -1,4 +1,4 @@
-modded class ExpansionCarAdminKey
+modded class ExpansionCarAdminKey extends ExpansionCarKey
 {
 	// ------------------------------------------------------------
 	// ExpansionCarAdminKey Constructor

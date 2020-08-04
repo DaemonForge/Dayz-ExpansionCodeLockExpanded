@@ -1,4 +1,4 @@
-class ActionRemoveExpansionCodeLockExpandedCB : ActionContinuousBaseCB {
+class ActionRemoveExpansionCodeLockExpandedCB extends ActionContinuousBaseCB {
     override void CreateActionComponent() {
 		float circleTime = 10; 
       	m_ActionData.m_ActionComponent = new CAContinuousRepeat(circleTime);

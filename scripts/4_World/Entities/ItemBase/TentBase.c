@@ -1,4 +1,5 @@
-modded class TentBase {
+modded class TentBase extends ItemBase
+{
 	
 	protected bool m_Locked= false;
 	protected string m_Code = "";

@@ -1,4 +1,4 @@
-class ActionDestroyExpansionCodeLockOnTentCB : ActionContinuousBaseCB {
+class ActionDestroyExpansionCodeLockOnTentCB extends ActionContinuousBaseCB {
     override void CreateActionComponent() {
 		float circleTime = GetExpansionCodeLockConfig().RaidTime / GetExpansionCodeLockConfig().RaidIncrements; 
       	m_ActionData.m_ActionComponent = new CAContinuousRepeat(circleTime);
