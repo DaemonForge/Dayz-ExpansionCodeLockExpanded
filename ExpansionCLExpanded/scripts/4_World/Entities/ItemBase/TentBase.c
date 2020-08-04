@@ -121,7 +121,7 @@ modded class TentBase extends ItemBase
 			m_Locked = true;
 			if ( !GetGame().IsServer()  ||  !GetGame().IsMultiplayer() ) // client side
 			{
-				//m_Sound = SEffectManager.PlaySound("Expansion_CodeLock_Locks_SoundSet", GetPosition());
+				//SEffectManager.PlaySound("Expansion_CodeLock_Locks_SoundSet", GetPosition());
 			}
 		}
 
@@ -133,7 +133,7 @@ modded class TentBase extends ItemBase
 		m_Locked = false;
 		if ( !GetGame().IsServer()  ||  !GetGame().IsMultiplayer() ) // client side
 		{
-			m_Sound = SEffectManager.PlaySound("Expansion_CodeLock_Unlock_SoundSet", GetPosition());
+			//SEffectManager.PlaySound("Expansion_CodeLock_Unlock_SoundSet", GetPosition());
 		}
 		SetSynchDirty();
 	}	
@@ -142,7 +142,7 @@ modded class TentBase extends ItemBase
 	{
 		if ( !GetGame().IsServer()  ||  !GetGame().IsMultiplayer() ) // client side
 		{
-			m_Sound = SEffectManager.PlaySound("Expansion_Shocks_SoundSet", GetPosition());
+			//SEffectManager.PlaySound("Expansion_Shocks_SoundSet", GetPosition());
 		}
 	}
 	
