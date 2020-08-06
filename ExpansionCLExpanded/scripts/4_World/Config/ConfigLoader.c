@@ -32,12 +32,12 @@ class ExpansionCodeLockConfig
 					AllowCodeLocksOnTents = true;
 					JsonFileLoader<ExpansionCodeLockConfig>.JsonSaveFile(ExpansionCodeLockPATH, this);
 				}
-				if (ConfigVersion != "2"){
+				if (ConfigVersion == "1"){
 					ConfigVersion = "2";
 					ScriptLogging = true;
 					JsonFileLoader<ExpansionCodeLockConfig>.JsonSaveFile(ExpansionCodeLockPATH, this);
 				}
-				if (ConfigVersion != "3"){
+				if (ConfigVersion == "2"){
 					ConfigVersion = "3";
 					AllowLockUnlockFromAnywhere = false;
 					JsonFileLoader<ExpansionCodeLockConfig>.JsonSaveFile(ExpansionCodeLockPATH, this);
