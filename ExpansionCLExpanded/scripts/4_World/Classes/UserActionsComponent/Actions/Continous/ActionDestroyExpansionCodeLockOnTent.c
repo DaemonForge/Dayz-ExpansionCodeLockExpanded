@@ -30,7 +30,6 @@ class ActionDestroyExpansionCodeLockOnTent : ActionContinuousBase {
         if (GetExpansionCodeLockConfig().AllowRaiding){
 			TentBase tent = TentBase.Cast(target.GetParent());
 			Hacksaw saw = Hacksaw.Cast(item);
-	
 	        m_Health = 0;
 	        m_MaxHealth = 0;
 	

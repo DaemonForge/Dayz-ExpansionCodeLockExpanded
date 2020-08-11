@@ -157,6 +157,52 @@ class CfgVehicles
 	{
 		inventorySlot[] = {"Att_ExpansionCodeLock","Att_ExpansionCodeLock_1","Att_ExpansionCodeLock_2", "Att_CombinationLock"};
 	};
+	
+	class ECLETablet: Inventory_Base
+	{
+		scope = 2;
+		displayName  = "Hacking Tablet";
+		descriptionShort  = "A Tablet Used for hacking code locks";
+		model = "\ExpansionCLExpanded\Data\ECLE_Tablet.p3d";
+		itemSize[] = {3,2};
+		weight = 800;
+		rotationFlags = 1;
+		attachments[] = {"BatteryD","BatteryD","BatteryD"};
+		hiddenSelections[] = 
+		{        
+			"tablet_on",
+			"tablet_off"
+		};
+		hiddenSelectionsTextures[] = 
+		{
+			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Good.paa",
+			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Ruined.paa",
+		};        
+		class DamageSystem
+		{
+			class GlobalHealth
+			{
+				class Health
+				{
+					hitpoints = 100;
+					healthLevels[] = {{1.0,{"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Good.rvmat"}},{0.7,{"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Good.rvmat"}},{0.5,{"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Good.rvmat"}},{0.3,{"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Ruined.rvmat"}},{0.0,{"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Ruined.rvmat"}}};
+				};
+			};
+			class DamageZones
+			{
+				class tablet
+				{
+					class Health
+					{
+						hitpoints = 100;
+						transferToGlobalCoef = 1;
+						healthLevels[] = {{1.0,{}},{0.7,{}},{0.5,{}},{0.3,{}},{0.0,{}}};
+					};
+					componentNames[] = {"tablet"};
+				};
+			};
+		};
+	};
+	
 };
-
 

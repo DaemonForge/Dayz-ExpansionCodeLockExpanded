@@ -5,14 +5,21 @@ static string ExpansionCodeLockPATH = "$profile:\\ExpansionCodeLockExpanded.json
 class ExpansionCodeLockConfig
 { 
 	//Default Values
-	string ConfigVersion = "3";
+	string ConfigVersion = "4";
 	bool AllowLockUnlockFromAnywhere = false;
 	bool AllowCodeLocksOnTents = true;
 	bool AllowRaiding = true;
 	float RaidTime = 600;
 	float RaidIncrements = 5;
-	
 	float HackSawDamage = 300;
+	bool AllowHackingTents = true;
+	float HackStartTimeTents = 45;
+	float HackingTimeTents = 600;
+	bool AllowHackingDoors = true;
+	float HackStartTimeDoors = 90;
+	float HackingTimeDoors = 900;
+	float ChanceOfInterrupt = 0.2;
+	
 	bool ScriptLogging = true;
 		
 	
@@ -40,6 +47,19 @@ class ExpansionCodeLockConfig
 				if (ConfigVersion == "2"){
 					ConfigVersion = "3";
 					AllowLockUnlockFromAnywhere = false;
+					JsonFileLoader<ExpansionCodeLockConfig>.JsonSaveFile(ExpansionCodeLockPATH, this);
+				}
+				
+				if (ConfigVersion == "3"){
+					ConfigVersion = "4";
+					AllowLockUnlockFromAnywhere = false;
+					AllowHackingTents = true;
+					HackStartTimeTents = 45;
+					HackingTimeTents = 600;
+					AllowHackingDoors = true;
+					HackStartTimeDoors = 90;
+					HackingTimeDoors = 900;
+					ChanceOfInterrupt = 0.2;
 					JsonFileLoader<ExpansionCodeLockConfig>.JsonSaveFile(ExpansionCodeLockPATH, this);
 				}
 				
