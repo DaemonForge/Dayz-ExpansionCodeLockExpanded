@@ -36,7 +36,7 @@ class ActionHackExpansionCodeLockOnDoor : ActionContinuousBase {
 				if (base_building.IsLocked() && !tablet.IsRuined() && (!tablet.HasHackingStarted() || tablet.WasHackingInterrupted())) {
 					continueHack = tablet.WasHackingInterrupted();
 					ExpansionCodeLock codelock = ExpansionCodeLock.Cast(base_building.GetAttachmentByConfigTypeName("ExpansionCodeLock"));
-					if ( codelock ) {
+					if ( tablet.CountBatteries() >= GetExpansionCodeLockConfig().BatteriesDoors && codelock ) {
 						return true;
 					}
 				}

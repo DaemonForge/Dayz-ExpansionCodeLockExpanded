@@ -49,11 +49,36 @@ class CfgMods
         };
     };
 };
+class CfgSlots
+{
+	class Slot_Att_ECLETabletBattery_1
+	{
+		name = "Att_ECLETabletBattery_1";
+		displayName = "Battery";
+		selection = "att_ECLETabletBattery";
+		ghostIcon = "batteryd";
+	};
+	class Slot_Att_ECLETabletBattery_2
+	{
+		name = "Att_ECLETabletBattery_2";
+		displayName = "Battery";
+		selection = "att_ECLETabletBattery";
+		ghostIcon = "batteryd";
+	};
+	class Slot_Att_ECLETabletBattery_3
+	{
+		name = "Att_ECLETabletBattery_3";
+		displayName = "Battery";
+		selection = "att_ECLETabletBattery";
+		ghostIcon = "batteryd";
+	};
+};
 class CfgVehicles
 {
 	class Container_Base;
 	class CombinationLock;
 	class Inventory_Base;
+	class Battery9V;
 	
 	class MediumTent: Container_Base
 	{
@@ -163,21 +188,30 @@ class CfgVehicles
 		scope = 2;
 		displayName  = "Hacking Tablet";
 		descriptionShort  = "A Tablet Used for hacking code locks";
-		model = "\ExpansionCLExpanded\Data\ECLE_Tablet.p3d";
+		model = "ExpansionCLExpanded\Data\ECLE_Tablet.p3d";
 		itemSize[] = {3,2};
 		weight = 800;
 		rotationFlags = 1;
-		attachments[] = {"BatteryD","BatteryD","BatteryD"};
+		attachments[] = {"Att_ECLETabletBattery_1", "Att_ECLETabletBattery_2", "Att_ECLETabletBattery_3"};
 		hiddenSelections[] = 
 		{        
+			"zbytek",
 			"tablet_on",
 			"tablet_off"
+			
 		};
 		hiddenSelectionsTextures[] = 
 		{
 			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Good.paa",
-			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Ruined.paa",
-		};        
+			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Good.paa" ,
+			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Ruined.paa"
+		};       
+		hiddenSelectionsMaterials[] = 
+		{
+			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Good.rvmat",
+			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_On.rvmat",
+			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Good.rvmat"
+		};       
 		class DamageSystem
 		{
 			class GlobalHealth
@@ -203,6 +237,35 @@ class CfgVehicles
 			};
 		};
 	};
-	
+	class ECLETabletBattery: Battery9V
+	{
+		scope = 2;
+		displayName  = "Tablet Battery";
+		descriptionShort  = "A Battery to put in tablets";
+		model = "ExpansionCLExpanded\Data\ECLE_TabletBattery.p3d";
+		itemSize[] = {1,1};
+		weight = 100;
+		rotationFlags = 1;
+		inventorySlot[] = {"Att_ECLETabletBattery_1", "Att_ECLETabletBattery_2", "Att_ECLETabletBattery_3"};
+		hiddenSelections[] = 
+		{        
+			"zbytek"
+		};
+		hiddenSelectionsTextures[] = 
+		{
+			"ExpansionCLExpanded\Data\textures\ECLE_Battery_co.paa" 
+		};        
+		class DamageSystem
+		{
+			class GlobalHealth
+			{
+				class Health
+				{
+					hitpoints = 20;
+					healthLevels[] = {{1.0,{"ExpansionCLExpanded\Data\textures\ECLE_Battery.rvmat"}},{0.7,{"ExpansionCLExpanded\Data\textures\ECLE_Battery.rvmat"}},{0.5,{"ExpansionCLExpanded\Data\textures\ECLE_Battery.rvmat"}},{0.3,{"ExpansionCLExpanded\Data\textures\ECLE_Battery.rvmat"}},{0.0,{"ExpansionCLExpanded\Data\textures\ECLE_Battery_Ruined.rvmat"}}};
+				};
+			};
+		};
+	};
 };
 

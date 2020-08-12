@@ -36,7 +36,7 @@ class ActionHackExpansionCodeLockOnTent : ActionContinuousBase {
 				if (tent.IsLocked() && !tablet.IsRuined() && (!tablet.HasHackingStarted() || tablet.WasHackingInterrupted())) {
 					continueHack = tablet.WasHackingInterrupted();
 					ExpansionCodeLock codelock = ExpansionCodeLock.Cast(tent.GetAttachmentByConfigTypeName("ExpansionCodeLock"));
-					if ( codelock ) {
+					if ( tablet.CountBatteries() >= GetExpansionCodeLockConfig().BatteriesTents && codelock ) {
 						return true;
 					}
 				}

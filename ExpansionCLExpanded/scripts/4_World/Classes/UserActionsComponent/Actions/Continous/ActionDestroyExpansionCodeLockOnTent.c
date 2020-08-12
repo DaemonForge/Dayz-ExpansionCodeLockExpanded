@@ -1,6 +1,6 @@
 class ActionDestroyExpansionCodeLockOnTentCB extends ActionContinuousBaseCB {
     override void CreateActionComponent() {
-		float circleTime = GetExpansionCodeLockConfig().RaidTime / GetExpansionCodeLockConfig().RaidIncrements; 
+		float circleTime = GetExpansionCodeLockConfig().HacksawRaidTime / GetExpansionCodeLockConfig().HacksawRaidIncrements; 
       	m_ActionData.m_ActionComponent = new CAContinuousRepeat(circleTime);
     }
 }
@@ -27,7 +27,7 @@ class ActionDestroyExpansionCodeLockOnTent : ActionContinuousBase {
     }
 
     override bool ActionCondition(PlayerBase player, ActionTarget target, ItemBase item) {
-        if (GetExpansionCodeLockConfig().AllowRaiding){
+        if (GetExpansionCodeLockConfig().AllowHacksawRaiding){
 			TentBase tent = TentBase.Cast(target.GetParent());
 			Hacksaw saw = Hacksaw.Cast(item);
 	        m_Health = 0;
@@ -50,7 +50,7 @@ class ActionDestroyExpansionCodeLockOnTent : ActionContinuousBase {
     override void OnFinishProgressServer(ActionData action_data) {
 
         TentBase tent = TentBase.Cast(action_data.m_Target.GetParent());
-        float raidIncrementAmount = m_MaxHealth / GetExpansionCodeLockConfig().RaidIncrements;
+        float raidIncrementAmount = m_MaxHealth / GetExpansionCodeLockConfig().HacksawRaidIncrements;
 		raidIncrementAmount++; //Just to make sure their are no rounding issues
        
 

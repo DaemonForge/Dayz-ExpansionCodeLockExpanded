@@ -3,12 +3,12 @@ diffuse[]={1,1,1,1};
 forcedDiffuse[]={0,0,0,0};
 emmisive[]={0,0,0,1};
 specular[]={0.1,0.1,0.1,1};
-specularPower=40;
+specularPower=20;
 PixelShaderID="Super";
 VertexShaderID="Super";
 class Stage1
 {
-    texture="ExpansionCLExpanded\Data\textures\ECLE_Tablet_Ruined.paa";
+    texture="ExpansionCLExpanded\Data\textures\ECLE_Tablet_Good.paa";
     uvSource="tex";
     class uvTransform
     {
@@ -32,14 +32,15 @@ class Stage2
 };
 class Stage3
 {
-    texture="dz\characters\data\generic_damage_mc.paa";
-    uvSource="tex";
+    texture="ExpansionCLExpanded\Data\textures\ECLE_Tablet_Glow.paa";
+    uvSource="none";
     class uvTransform
     {
-        aside[]={1,0,0};
-        up[]={0,1,0};
-        dir[]={0,0,0};
-        pos[]={0,0,0};
+		ambient[]={70,180,70,1};
+		diffuse[]={1,1,1,1};
+		forcedDiffuse[]={0,2,0,1};
+		emmisive[]={0,130,0,1};
+		specular[]={0.1,1.0,0.1,1};
     };
 };
 class Stage4
