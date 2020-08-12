@@ -233,12 +233,18 @@ class ECLETablet extends ItemBase{
 		m_TabletON = true;
 		m_TabletONLocal = true;
 		SetObjectMaterial( 0, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_On.rvmat" );
+		SetObjectMaterial( 1, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_On.rvmat" );
+		SetObjectTexture( 0, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_On.paa" );
+		SetObjectTexture( 1, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_On.paa" );
 	}
 	
 	void TurnOffTablet(){
 		m_TabletON = false;
 		m_TabletONLocal = false;
 		SetObjectMaterial( 0, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_Good.rvmat" );
+		SetObjectMaterial( 1, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_Good.rvmat" );
+		SetObjectTexture( 0, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_Good.paa" );
+		SetObjectTexture( 1, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_Good.paa" );
 	}
 	
 	override void OnStoreSave(ParamsWriteContext ctx)
