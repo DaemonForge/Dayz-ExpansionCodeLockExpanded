@@ -33,11 +33,19 @@ class ActionHackExpansionCodeLockOnDoor : ActionContinuousBase {
 			ECLETablet tablet = ECLETablet.Cast(item);
 			
 			if (base_building && tablet) {
-				if (base_building.IsLocked() && !tablet.IsRuined() && (!tablet.HasHackingStarted() || tablet.WasHackingInterrupted())) {
-					continueHack = tablet.WasHackingInterrupted();
+				//Hacking is fresh Start
+				if (base_building.IsLocked() && !tablet.IsRuined()){
 					ExpansionCodeLock codelock = ExpansionCodeLock.Cast(base_building.GetAttachmentByConfigTypeName("ExpansionCodeLock"));
-					if ( tablet.CountBatteries() >= GetExpansionCodeLockConfig().BatteriesDoors && codelock ) {
-						return true;
+					if (tablet.WasHackingInterrupted() && tablet.ECLE_GetHackID() == base_building.ECLE_GetHackID()) {
+						continueHack = true;
+						if ( tablet.CountBatteries() >= GetExpansionCodeLockConfig().BatteriesDoors && codelock ) {
+							return true;
+						}
+					}else if(!tablet.HasHackingStarted() || tablet.WasHackingInterrupted()) {
+						continueHack = false;
+						if ( tablet.CountBatteries() >= GetExpansionCodeLockConfig().BatteriesDoors && codelock ) {
+							return true;
+						}
 					}
 				}
 	        }

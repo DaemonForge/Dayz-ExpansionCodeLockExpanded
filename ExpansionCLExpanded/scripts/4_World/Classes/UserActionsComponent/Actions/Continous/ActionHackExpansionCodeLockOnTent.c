@@ -28,16 +28,24 @@ class ActionHackExpansionCodeLockOnTent : ActionContinuousBase {
     }
 
     override bool ActionCondition(PlayerBase player, ActionTarget target, ItemBase item) {
-        if (GetExpansionCodeLockConfig().AllowHackingTents){
+	    if (GetExpansionCodeLockConfig().AllowHackingDoors){
 			TentBase tent = TentBase.Cast(target.GetParent());
 			ECLETablet tablet = ECLETablet.Cast(item);
 			
 			if (tent && tablet) {
-				if (tent.IsLocked() && !tablet.IsRuined() && (!tablet.HasHackingStarted() || tablet.WasHackingInterrupted())) {
-					continueHack = tablet.WasHackingInterrupted();
+				//Hacking is fresh Start
+				if (tent.IsLocked() && !tablet.IsRuined()){
 					ExpansionCodeLock codelock = ExpansionCodeLock.Cast(tent.GetAttachmentByConfigTypeName("ExpansionCodeLock"));
-					if ( tablet.CountBatteries() >= GetExpansionCodeLockConfig().BatteriesTents && codelock ) {
-						return true;
+					if ( tablet.WasHackingInterrupted() && tablet.ECLE_GetHackID() == tent.ECLE_GetHackID() ) {
+						continueHack = true;
+						if ( tablet.CountBatteries() >= GetExpansionCodeLockConfig().BatteriesTents && codelock) {
+							return true;
+						}
+					} else if(!tablet.HasHackingStarted() || tablet.WasHackingInterrupted()) {
+						continueHack = false;
+						if ( tablet.CountBatteries() >= GetExpansionCodeLockConfig().BatteriesTents && codelock ) {
+							return true;
+						}
 					}
 				}
 	        }

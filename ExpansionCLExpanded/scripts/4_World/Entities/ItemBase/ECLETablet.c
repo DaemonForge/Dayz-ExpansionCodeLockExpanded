@@ -21,7 +21,9 @@ class ECLETablet extends ItemBase{
     }
 
 	void ECLETablet(){
-		
+		SetObjectTexture(0, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_Ruined.paa");
+		SetObjectMaterial( 0, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_Good.rvmat" );
+		SetObjectMaterial( GetHiddenSelectionIndex("screen"), "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_Good.rvmat" );
 	}
 	
 	void ~ECLETablet()
@@ -44,6 +46,7 @@ class ECLETablet extends ItemBase{
 		RegisterNetSyncVariableBool("m_HackingInterrupted");
 		RegisterNetSyncVariableFloat("m_HackTimeRemaining");
 		RegisterNetSyncVariableBool("m_HackingCompleted");
+		RegisterNetSyncVariableBool("m_TabletON");
 	}
 	
 	override void OnVariablesSynchronized()
@@ -89,15 +92,31 @@ class ECLETablet extends ItemBase{
 		if (Hacker && HackingTarget){
 			m_HackingCompleted = false;
 			m_HackingInterrupted = false;
-			if (!m_HackingStarted){
-				
-				
+			
+			if ( HackingTarget.ECLE_GetHackID() != this.ECLE_GetHackID() || HackingTarget.ECLE_GetHackID() == 0){ //Starting A hack on a new object
 				m_HackingStarted = true;
 				m_HackTimeRemaining = GetExpansionCodeLockConfig().HackingTimeTents * 1000;
+				
 				if( BaseBuildingBase.Cast(hackingTarget)){
 					m_HackTimeRemaining = GetExpansionCodeLockConfig().HackingTimeDoors * 1000;
 				}
+				
+				int HackID = GetGame().GetTime();
+				HackID = HackID * 10000;
+				HackID = HackID + Math.RandomInt(0,10000);
+				this.ECLE_HackInit(HackID);
+				HackingTarget.ECLE_HackInit(HackID);
+				if (Hacker.GetIdentity() && GetExpansionCodeLockConfig().ScriptLogging){
+					Print("[CodeLockExpanded][Raid] " + Hacker.GetIdentity().GetName() + "(" +  Hacker.GetIdentity().GetPlainId() + ") has started hacking " + HackingTarget.GetType() + " with ID: " + HackID + " at " + HackingTarget.GetPosition());
+				}
+			} else {
+				this.ECLE_HackInit(ECLE_GetHackID());
+				HackingTarget.ECLE_HackInit(ECLE_GetHackID());
+				if (Hacker.GetIdentity() && GetExpansionCodeLockConfig().ScriptLogging){
+					Print("[CodeLockExpanded][Raid] " + Hacker.GetIdentity().GetName() + "(" +  Hacker.GetIdentity().GetPlainId() + ") has resumed hacking " + HackingTarget.GetType() + " with ID: " + ECLE_GetHackID() + " at " + HackingTarget.GetPosition());
+				}
 			}
+			SendPlayerMessage(Hacker, "Hack Started", "The hacking of " + hackingTarget.GetDisplayName() + " has started");
 			GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater(this.CheckHackProgress, 2000, false, hackingTarget, hacker);
 			SetSynchDirty();
 		}
@@ -111,8 +130,7 @@ class ECLETablet extends ItemBase{
 		PlayerBase Hacker = PlayerBase.Cast(hacker);
 		ItemBase HackingTarget = ItemBase.Cast(hackingTarget);
 		if (Hacker && HackingTarget){
-			float DoInterrupt = Math.RandomFloat(0,1);
-			float InterruptChance = GetExpansionCodeLockConfig().ChanceOfInterrupt; // so the chance is effectly every 4 seconds instead of every 2 Seconds
+			
 			TentBase tent = TentBase.Cast(hackingTarget); 
 			BaseBuildingBase door = BaseBuildingBase.Cast(hackingTarget);
 			
@@ -123,9 +141,16 @@ class ECLETablet extends ItemBase{
 				m_HackingInterrupted = true;
 			}
 			
+			if(!HackingTarget.IsLocked()){
+				m_HackingInterrupted = true;
+			}
+			
+			float DoInterrupt = Math.RandomFloat(0,1);
+			float InterruptChance = GetExpansionCodeLockConfig().ChanceOfInterrupt;
 			if (DoInterrupt < InterruptChance){
 				m_HackingInterrupted = true;
 			}
+			
 			
 			if (!m_HackingInterrupted && !HackingTarget.IsRuined() && vector.Distance(HackingTarget.GetPosition(), Hacker.GetPosition()) < 10 && Hacker.GetItemInHands() == this){
 				m_HackTimeRemaining = m_HackTimeRemaining - 2000;
@@ -138,13 +163,10 @@ class ECLETablet extends ItemBase{
 					GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater(this.HackCompleted, 200, false, hackingTarget, Hacker);
 				}
 			} else {
+				HackingTarget.ECLE_InterruptHack();
+				this.ECLE_InterruptHack();
 				m_HackingInterrupted = true;
-				if(Hacker.GetIdentity()){
-					string InterruptedHeading = "Hack Interrupted";
-					string InterruptedMessage = "The Hacking of " + hackingTarget.GetDisplayName() + " has been Interrupted";
-					string InterruptedIcon = "ExpansionCLExpanded/GUI/Images/hacking.paa";
-					GetNotificationSystem().CreateNotification(new ref StringLocaliser(InterruptedHeading), new ref StringLocaliser(InterruptedMessage), InterruptedIcon, -938286307, 15, Hacker.GetIdentity());
-				}
+				SendPlayerMessage(Hacker, "Hack Interrupted", "The hacking of " + hackingTarget.GetDisplayName() + " has been interrupted");
 			}
 		}else{
 			m_HackingStarted = false;
@@ -176,10 +198,14 @@ class ECLETablet extends ItemBase{
 					}
 				#endif
 				if (Hacker.GetIdentity() && GetExpansionCodeLockConfig().ScriptLogging){
-					Print("[CodeLockExpanded][Raid] " + Hacker.GetIdentity().GetName() + "(" +  Hacker.GetIdentity().GetPlainId() + ") Hacked  " + tent.GetType() + " at " + tent.GetPosition());
+					Print("[CodeLockExpanded][Raid] " + Hacker.GetIdentity().GetName() + "(" +  Hacker.GetIdentity().GetPlainId() + ") Hacked  " + tent.GetType() + " with ID: " + ECLE_GetHackID() + " at " + tent.GetPosition());
 				}
 				this.AddHealth("GlobalHealth", "Health", GetExpansionCodeLockConfig().TabletDamage);
 				DestoryBatteries( GetExpansionCodeLockConfig().BatteriesTents );
+				
+				tent.ECLE_CompleteHack();
+				this.ECLE_CompleteHack();
+				
 				m_HackingStarted = false;
 				m_HackingInterrupted = false;
 				m_HackingCompleted = true;
@@ -202,10 +228,14 @@ class ECLETablet extends ItemBase{
 					}
 				#endif
 				if (Hacker.GetIdentity() && GetExpansionCodeLockConfig().ScriptLogging){
-					Print("[CodeLockExpanded][Raid] " + Hacker.GetIdentity().GetName() + "(" +  Hacker.GetIdentity().GetPlainId() + ") Hacked  " + HackingTarget.GetType() + " at " + HackingTarget.GetPosition());
+					Print("[CodeLockExpanded][Raid] " + Hacker.GetIdentity().GetName() + "(" +  Hacker.GetIdentity().GetPlainId() + ") Hacked  " + HackingTarget.GetType() + " with ID: " + ECLE_GetHackID() + " at " + HackingTarget.GetPosition());
 				}
 				this.AddHealth("", "Health", GetExpansionCodeLockConfig().TabletDamage);
 				DestoryBatteries( GetExpansionCodeLockConfig().BatteriesDoors );
+				
+				HackingTarget.ECLE_CompleteHack();
+				this.ECLE_CompleteHack();
+				
 				m_HackingStarted = false;
 				m_HackingInterrupted = false;
 				m_HackingCompleted = true;
@@ -214,11 +244,8 @@ class ECLETablet extends ItemBase{
 		if (CountBatteries() < 1){
 			m_TabletON = false;
 		}
-		if (m_HackingCompleted && Hacker.GetIdentity()){
-			string CompletedHeading = "Hack Finished";
-			string CompletedMessage = "The Hacking of " + hackingTarget.GetDisplayName() + " has Finished";
-			string CompletedIcon = "ExpansionCLExpanded/GUI/Images/hacking.paa";
-			GetNotificationSystem().CreateNotification(new ref StringLocaliser(CompletedHeading), new ref StringLocaliser(CompletedMessage), CompletedIcon, -938286307, 15, Hacker.GetIdentity());
+		if (m_HackingCompleted){
+			SendPlayerMessage(Hacker, "Hack Finished", "The hacking of " + hackingTarget.GetDisplayName() + " has finished");
 		}
 		SetSynchDirty();
 	}
@@ -232,19 +259,23 @@ class ECLETablet extends ItemBase{
 	void TurnOnTablet(){
 		m_TabletON = true;
 		m_TabletONLocal = true;
-		SetObjectMaterial( 0, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_On.rvmat" );
-		SetObjectMaterial( 1, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_On.rvmat" );
-		SetObjectTexture( 0, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_On.paa" );
-		SetObjectTexture( 1, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_On.paa" );
+		if(!IsRuined()){
+			SetObjectTexture(0, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_On.paa");
+			SetObjectMaterial( 0, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_On.rvmat" );
+			SetObjectMaterial( GetHiddenSelectionIndex("screen"), "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_Glow.rvmat" );
+			Print("[ECLE] TurnOnTablet");
+		}
 	}
 	
 	void TurnOffTablet(){
 		m_TabletON = false;
 		m_TabletONLocal = false;
-		SetObjectMaterial( 0, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_Good.rvmat" );
-		SetObjectMaterial( 1, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_Good.rvmat" );
-		SetObjectTexture( 0, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_Good.paa" );
-		SetObjectTexture( 1, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_Good.paa" );
+		if(!IsRuined()){
+			SetObjectTexture(0, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_Good.paa");
+			SetObjectMaterial( 0, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_Good.rvmat" );
+			SetObjectMaterial( GetHiddenSelectionIndex("screen"), "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_Good.rvmat" );
+			Print("[ECLE] TurnOffTablet");
+		}
 	}
 	
 	override void OnStoreSave(ParamsWriteContext ctx)
@@ -287,7 +318,6 @@ class ECLETablet extends ItemBase{
 		{
 			loadingsuccessfull = false;
 		}
-		
 		
 		
 		if ( loadingsuccessfull && m_HackingStarted && m_HackTimeRemaining > 0 && !m_HackingCompleted ){
@@ -360,20 +390,32 @@ class ECLETablet extends ItemBase{
 	
 	override void EEItemAttached(EntityAI item, string slot_name){
 		super.EEItemAttached(item, slot_name);
-		if (slot_name == "Att_ECLETabletBattery_1" || slot_name == "Att_ECLETabletBattery_2" || slot_name == "Att_ECLETabletBattery_3" ){
+		if (GetGame().IsServer() && (slot_name == "Att_ECLETabletBattery_1" || slot_name == "Att_ECLETabletBattery_2" || slot_name == "Att_ECLETabletBattery_3")){
 			m_TabletON = true;
+			SetSynchDirty();
 		}
 	}
 	
 	override void EEItemDetached(EntityAI item, string slot_name)
 	{
 		super.EEItemDetached(item, slot_name);
-		if (slot_name == "Att_ECLETabletBattery_1" || slot_name == "Att_ECLETabletBattery_2" || slot_name == "Att_ECLETabletBattery_3" ){
+		if (GetGame().IsServer() && (slot_name == "Att_ECLETabletBattery_1" || slot_name == "Att_ECLETabletBattery_2" || slot_name == "Att_ECLETabletBattery_3" )){
 			if (CountBatteries() < 1){
 				m_TabletON = false;
+				SetSynchDirty();
 			}
 		}
 		
+	}
+	
+	void SendPlayerMessage(PlayerBase hacker, string heading, string text){
+		PlayerBase Hacker = PlayerBase.Cast(hacker);
+		if(Hacker.GetIdentity()){
+			string Heading = heading;
+			string Message = text;
+			string Icon = "ExpansionCLExpanded/GUI/Images/hacking.paa";
+			GetNotificationSystem().CreateNotification(new ref StringLocaliser(Heading), new ref StringLocaliser(Message), Icon, -938286307, 15, Hacker.GetIdentity());
+		}
 	}
 	
 }

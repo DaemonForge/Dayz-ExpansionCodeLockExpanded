@@ -196,21 +196,18 @@ class CfgVehicles
 		hiddenSelections[] = 
 		{        
 			"zbytek",
-			"tablet_on",
-			"tablet_off"
+			"screen"
 			
 		};
 		hiddenSelectionsTextures[] = 
 		{
 			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Good.paa",
-			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Good.paa" ,
-			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Ruined.paa"
+			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Good.paa"
 		};       
 		hiddenSelectionsMaterials[] = 
 		{
 			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Good.rvmat",
-			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_On.rvmat",
-			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Good.rvmat"
+			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Glow.rvmat"
 		};       
 		class DamageSystem
 		{
