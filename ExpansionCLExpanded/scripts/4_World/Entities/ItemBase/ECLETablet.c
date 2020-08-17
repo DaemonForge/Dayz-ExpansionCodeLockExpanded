@@ -258,11 +258,8 @@ class ECLETablet extends ItemBase{
 		m_TabletON = true;
 		m_TabletONLocal = true;
 		if(!IsRuined()){
-			HideAllSelections();
-			ShowSelection("screen");
-			ShowSelection("tablet_on");
-			SetObjectTexture(GetHiddenSelectionIndex("tablet_on"), "ExpansionCLExpanded\\Data\\textures\\ECLE_tablet_on_ca.paa");
-			SetObjectMaterial( GetHiddenSelectionIndex("screen"), "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_screen_on.rvmat" );
+			SetObjectTexture(0, "ExpansionCLExpanded\\Data\\textures\\ECLE_tablet_on_ca.paa");
+			SetObjectMaterial( GetHiddenSelectionIndex("backscreen"), "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_screen_on.rvmat" );
 			Print("[ECLE] TurnOnTablet");
 		}
 	}
@@ -271,10 +268,8 @@ class ECLETablet extends ItemBase{
 		m_TabletON = false;
 		m_TabletONLocal = false;
 		if(!IsRuined()){
-			HideAllSelections();
-			ShowSelection("tablet_off");
-			SetObjectTexture(GetHiddenSelectionIndex("tablet_off"), "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_off_co.paa");
-			SetObjectMaterial( GetHiddenSelectionIndex("screen"), "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_off.rvmat" );
+			SetObjectTexture(0, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_off_co.paa");
+			SetObjectMaterial( GetHiddenSelectionIndex("backscreen"), "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_on.rvmat" );
 			Print("[ECLE] TurnOffTablet");
 		}
 	}
