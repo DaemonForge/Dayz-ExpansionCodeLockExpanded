@@ -54,21 +54,28 @@ class CfgSlots
 	class Slot_Att_ECLETabletBattery_1
 	{
 		name = "Att_ECLETabletBattery_1";
-		displayName = "Battery";
+		displayName = "Tablet Battery";
 		selection = "att_ECLETabletBattery";
 		ghostIcon = "batteryd";
 	};
 	class Slot_Att_ECLETabletBattery_2
 	{
 		name = "Att_ECLETabletBattery_2";
-		displayName = "Battery";
+		displayName = "Tablet Battery";
 		selection = "att_ECLETabletBattery";
 		ghostIcon = "batteryd";
 	};
 	class Slot_Att_ECLETabletBattery_3
 	{
 		name = "Att_ECLETabletBattery_3";
-		displayName = "Battery";
+		displayName = "Tablet Battery";
+		selection = "att_ECLETabletBattery";
+		ghostIcon = "batteryd";
+	};
+	class Slot_Att_ECLETabletBattery_4
+	{
+		name = "Att_ECLETabletBattery_4";
+		displayName = "Tablet Battery";
 		selection = "att_ECLETabletBattery";
 		ghostIcon = "batteryd";
 	};
@@ -188,27 +195,34 @@ class CfgVehicles
 		scope = 2;
 		displayName  = "Hacking Tablet";
 		descriptionShort  = "A Tablet Used for hacking code locks";
-		model = "ExpansionCLExpanded\Data\ECLE_Tablet.p3d";
+		model = "ExpansionCLExpanded\Data\ECLE_Tablet.p3d"; // "/" was deleted at the begining of path 
 		itemSize[] = {3,2};
 		weight = 800;
 		rotationFlags = 1;
-		attachments[] = {"Att_ECLETabletBattery_1", "Att_ECLETabletBattery_2", "Att_ECLETabletBattery_3"};
+		attachments[] = {"Att_ECLETabletBattery_1", "Att_ECLETabletBattery_2", "Att_ECLETabletBattery_3","Att_ECLETabletBattery_4"};
 		hiddenSelections[] = 
 		{        
 			"zbytek",
-			"screen"
+			"tablet_on",
+			"tablef_off",
+			"screen",
+			"background",
+			"backscreen"
 			
+		
 		};
 		hiddenSelectionsTextures[] = 
 		{
-			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Good.paa",
-			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Good.paa"
-		};       
-		hiddenSelectionsMaterials[] = 
-		{
-			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Good.rvmat",
-			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Glow.rvmat"
-		};       
+			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_on_ca.paa",
+			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_on_co.paa",
+			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_off_co.paa",
+			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_on_ca.paa",
+			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_on_co.paa",
+			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_on_co.paa"
+			
+			
+			// added  texture to selection
+		};        
 		class DamageSystem
 		{
 			class GlobalHealth
@@ -216,10 +230,10 @@ class CfgVehicles
 				class Health
 				{
 					hitpoints = 100;
-					healthLevels[] = {{1.0,{"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Good.rvmat"}},{0.7,{"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Good.rvmat"}},{0.5,{"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Good.rvmat"}},{0.3,{"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Ruined.rvmat"}},{0.0,{"ExpansionCLExpanded\Data\textures\ECLE_Tablet_Ruined.rvmat"}}};
+					healthLevels[] = {{1.0,{"ExpansionCLExpanded\Data\textures\ECLE_Tablet_on.rvmat"}},{0.7,{"ExpansionCLExpanded\Data\textures\ECLE_Tablet_on.rvmat"}},{0.5,{"ExpansionCLExpanded\Data\textures\ECLE_Tablet_damage.rvmat"}},{0.3,{"ExpansionCLExpanded\Data\textures\ECLE_Tablet_damage.rvmat"}},{0.0,{"ExpansionCLExpanded\Data\textures\ECLE_Tablet_destruct.rvmat"}}};
 				};
 			};
-			class DamageZones
+			/*class DamageZones
 			{
 				class tablet
 				{
@@ -231,7 +245,7 @@ class CfgVehicles
 					};
 					componentNames[] = {"tablet"};
 				};
-			};
+			};*/
 		};
 	};
 	class ECLETabletBattery: Battery9V
@@ -243,7 +257,7 @@ class CfgVehicles
 		itemSize[] = {1,1};
 		weight = 100;
 		rotationFlags = 1;
-		inventorySlot[] = {"Att_ECLETabletBattery_1", "Att_ECLETabletBattery_2", "Att_ECLETabletBattery_3"};
+		inventorySlot[] = {"Att_ECLETabletBattery_1", "Att_ECLETabletBattery_2", "Att_ECLETabletBattery_3","Att_ECLETabletBattery_4"};
 		hiddenSelections[] = 
 		{        
 			"zbytek"

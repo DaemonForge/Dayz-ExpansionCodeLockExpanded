@@ -1,14 +1,14 @@
-ambient[]={50,120,50,1};
-diffuse[]={-1,-1,-1,1};
-forcedDiffuse[]={0.1,2,0.1,1};
-emmisive[]={0,100,0,1};
-specular[]={0,0,0,1};
-specularPower=30;
+ambient[]={1,1,1,1};
+diffuse[]={1,1,1,1};
+forcedDiffuse[]={0,0,0,0};
+emmisive[]={0,0,0,1};
+specular[]={0.1,0.1,0.1,1};
+specularPower=60;
 PixelShaderID="Super";
 VertexShaderID="Super";
 class Stage1
 {
-    texture="ExpansionCLExpanded\Data\textures\ECLE_Tablet_On.paa";
+    texture="ExpansionCLExpanded\Data\textures\ECLE_Tablet_nohq.paa";
     uvSource="tex";
     class uvTransform
     {
@@ -56,7 +56,7 @@ class Stage4
 };
 class Stage5
 {
-    texture="#(argb,8,8,3)color(1,0.839216,0.513725,1.0,SMDI)";
+    texture="ExpansionCLExpanded\Data\textures\ECLE_Tablet_smdi.paa";
     uvSource="tex";
     class uvTransform
     {

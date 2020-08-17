@@ -21,9 +21,7 @@ class ECLETablet extends ItemBase{
     }
 
 	void ECLETablet(){
-		SetObjectTexture(0, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_Ruined.paa");
-		SetObjectMaterial( 0, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_Good.rvmat" );
-		SetObjectMaterial( GetHiddenSelectionIndex("screen"), "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_Good.rvmat" );
+		
 	}
 	
 	void ~ECLETablet()
@@ -260,9 +258,11 @@ class ECLETablet extends ItemBase{
 		m_TabletON = true;
 		m_TabletONLocal = true;
 		if(!IsRuined()){
-			SetObjectTexture(0, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_On.paa");
-			SetObjectMaterial( 0, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_On.rvmat" );
-			SetObjectMaterial( GetHiddenSelectionIndex("screen"), "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_Glow.rvmat" );
+			HideAllSelections();
+			ShowSelection("screen");
+			ShowSelection("tablet_on");
+			SetObjectTexture(GetHiddenSelectionIndex("tablet_on"), "ExpansionCLExpanded\\Data\\textures\\ECLE_tablet_on_ca.paa");
+			SetObjectMaterial( GetHiddenSelectionIndex("screen"), "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_screen_on.rvmat" );
 			Print("[ECLE] TurnOnTablet");
 		}
 	}
@@ -271,9 +271,10 @@ class ECLETablet extends ItemBase{
 		m_TabletON = false;
 		m_TabletONLocal = false;
 		if(!IsRuined()){
-			SetObjectTexture(0, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_Good.paa");
-			SetObjectMaterial( 0, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_Good.rvmat" );
-			SetObjectMaterial( GetHiddenSelectionIndex("screen"), "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_Good.rvmat" );
+			HideAllSelections();
+			ShowSelection("tablet_off");
+			SetObjectTexture(GetHiddenSelectionIndex("tablet_off"), "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_off_co.paa");
+			SetObjectMaterial( GetHiddenSelectionIndex("screen"), "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_off.rvmat" );
 			Print("[ECLE] TurnOffTablet");
 		}
 	}
@@ -334,6 +335,7 @@ class ECLETablet extends ItemBase{
 		ECLETabletBattery tempBattery1;
 		ECLETabletBattery tempBattery2;
 		ECLETabletBattery tempBattery3;
+		ECLETabletBattery tempBattery4;
 		
 		if (Class.CastTo(tempBattery1, FindAttachmentBySlotName("Att_ECLETabletBattery_1"))){
 			if (!tempBattery1.IsRuined()){
@@ -350,6 +352,11 @@ class ECLETablet extends ItemBase{
 				count++;
 			}
 		}
+		if (Class.CastTo(tempBattery4, FindAttachmentBySlotName("Att_ECLETabletBattery_4"))){
+			if (!tempBattery4.IsRuined()){
+				count++;
+			}
+		}
 		return count;
 	}
 	
@@ -358,7 +365,17 @@ class ECLETablet extends ItemBase{
 		ECLETabletBattery tempBattery1;
 		ECLETabletBattery tempBattery2;
 		ECLETabletBattery tempBattery3;
+		ECLETabletBattery tempBattery4;
 		
+		if (Class.CastTo(tempBattery4, FindAttachmentBySlotName("Att_ECLETabletBattery_4"))){
+			if (!tempBattery4.IsRuined()){
+				tempBattery4.AddHealth("", "Health", -21);
+				count++;
+			}
+			if (count >= number){
+				return;
+			}
+		}
 		if (Class.CastTo(tempBattery3, FindAttachmentBySlotName("Att_ECLETabletBattery_3"))){
 			if (!tempBattery3.IsRuined()){
 				tempBattery3.AddHealth("", "Health", -21);
@@ -390,7 +407,7 @@ class ECLETablet extends ItemBase{
 	
 	override void EEItemAttached(EntityAI item, string slot_name){
 		super.EEItemAttached(item, slot_name);
-		if (GetGame().IsServer() && (slot_name == "Att_ECLETabletBattery_1" || slot_name == "Att_ECLETabletBattery_2" || slot_name == "Att_ECLETabletBattery_3")){
+		if (GetGame().IsServer() && (slot_name == "Att_ECLETabletBattery_1" || slot_name == "Att_ECLETabletBattery_2" || slot_name == "Att_ECLETabletBattery_3" || slot_name == "Att_ECLETabletBattery_4")){
 			m_TabletON = true;
 			SetSynchDirty();
 		}
@@ -399,7 +416,7 @@ class ECLETablet extends ItemBase{
 	override void EEItemDetached(EntityAI item, string slot_name)
 	{
 		super.EEItemDetached(item, slot_name);
-		if (GetGame().IsServer() && (slot_name == "Att_ECLETabletBattery_1" || slot_name == "Att_ECLETabletBattery_2" || slot_name == "Att_ECLETabletBattery_3" )){
+		if (GetGame().IsServer() && (slot_name == "Att_ECLETabletBattery_1" || slot_name == "Att_ECLETabletBattery_2" || slot_name == "Att_ECLETabletBattery_3"  || slot_name == "Att_ECLETabletBattery_4" )){
 			if (CountBatteries() < 1){
 				m_TabletON = false;
 				SetSynchDirty();
