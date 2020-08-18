@@ -76,15 +76,18 @@ class ECLETablet extends ItemBase{
 	void HackInterruptedClient(){
 		m_HackingInterruptedLocal = m_HackingInterrupted;
 		SEffectManager.PlaySoundOnObject("landmine_end_SoundSet", this);
+		SetAnimationPhase("top",0);
 	}
 	
 	void HackCompletedClient(){
 		m_HackingCompletedLocal = m_HackingCompleted;
 		SEffectManager.PlaySoundOnObject("Expansion_CodeLock_Unlock_SoundSet", this);
+		SetAnimationPhase("top",0);
 	}
 	
 	
 	void StartHackServer(ItemBase hackingTarget, PlayerBase hacker){
+		SetAnimationPhase("top",1);
 		PlayerBase Hacker = PlayerBase.Cast(hacker);
 		ItemBase HackingTarget = ItemBase.Cast(hackingTarget);
 		if (Hacker && HackingTarget){
@@ -121,6 +124,7 @@ class ECLETablet extends ItemBase{
 	}
 	
 	void StartHackClient(){
+		SetAnimationPhase("top",1);
 		SEffectManager.PlaySoundOnObject("defibrillator_ready_SoundSet", this);
 	}
 	
@@ -161,6 +165,7 @@ class ECLETablet extends ItemBase{
 					GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater(this.HackCompleted, 200, false, hackingTarget, Hacker);
 				}
 			} else {
+				SetAnimationPhase("top",0);
 				HackingTarget.ECLE_InterruptHack();
 				this.ECLE_InterruptHack();
 				m_HackingInterrupted = true;
@@ -174,6 +179,7 @@ class ECLETablet extends ItemBase{
 	}
 	
 	void HackCompleted(ItemBase hackingTarget, PlayerBase hacker){
+		SetAnimationPhase("top",0);
 		PlayerBase Hacker = PlayerBase.Cast(hacker);
 		BaseBuildingBase HackingTarget = BaseBuildingBase.Cast(hackingTarget);
 		float itemMaxHealth = 0;
@@ -239,7 +245,7 @@ class ECLETablet extends ItemBase{
 				m_HackingCompleted = true;
             }
         }
-		if (CountBatteries() < 1){
+		if (CountBatteries() == 0){
 			m_TabletON = false;
 		}
 		if (m_HackingCompleted){
@@ -258,9 +264,10 @@ class ECLETablet extends ItemBase{
 		m_TabletON = true;
 		m_TabletONLocal = true;
 		if(!IsRuined()){
-			SetObjectTexture(0, "ExpansionCLExpanded\\Data\\textures\\ECLE_tablet_on_ca.paa");
+			SetObjectTexture(0, "ExpansionCLExpanded\\Data\\textures\\ECLE_tablet_on_co.paa");
+			SetObjectTexture(GetHiddenSelectionIndex("screen"), "ExpansionCLExpanded\\Data\\textures\\ECLE_tablet_on_ca.paa");
+			SetObjectTexture(GetHiddenSelectionIndex("backscreen"), "ExpansionCLExpanded\\Data\\textures\\ECLE_tablet_on_co.paa");
 			SetObjectMaterial( GetHiddenSelectionIndex("backscreen"), "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_screen_on.rvmat" );
-			Print("[ECLE] TurnOnTablet");
 		}
 	}
 	
@@ -269,8 +276,8 @@ class ECLETablet extends ItemBase{
 		m_TabletONLocal = false;
 		if(!IsRuined()){
 			SetObjectTexture(0, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_off_co.paa");
+			SetObjectTexture(GetHiddenSelectionIndex("screen"), "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_off_co.paa");
 			SetObjectMaterial( GetHiddenSelectionIndex("backscreen"), "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_on.rvmat" );
-			Print("[ECLE] TurnOffTablet");
 		}
 	}
 	
@@ -319,10 +326,22 @@ class ECLETablet extends ItemBase{
 		if ( loadingsuccessfull && m_HackingStarted && m_HackTimeRemaining > 0 && !m_HackingCompleted ){
 			m_HackingInterrupted = true;
 		}
-				
+		
 		SetSynchDirty();
 		
 		return loadingsuccessfull;
+	}
+	
+	override void AfterStoreLoad()
+	{	
+		super.AfterStoreLoad();
+		
+		if (m_TabletON){
+			 TurnOnTablet();
+		} else {
+			TurnOffTablet();
+		}
+		SetSynchDirty();
 	}
 	
 	int CountBatteries(){
@@ -412,7 +431,7 @@ class ECLETablet extends ItemBase{
 	{
 		super.EEItemDetached(item, slot_name);
 		if (GetGame().IsServer() && (slot_name == "Att_ECLETabletBattery_1" || slot_name == "Att_ECLETabletBattery_2" || slot_name == "Att_ECLETabletBattery_3"  || slot_name == "Att_ECLETabletBattery_4" )){
-			if (CountBatteries() < 1){
+			if (CountBatteries() == 0){
 				m_TabletON = false;
 				SetSynchDirty();
 			}
@@ -422,7 +441,7 @@ class ECLETablet extends ItemBase{
 	
 	void SendPlayerMessage(PlayerBase hacker, string heading, string text){
 		PlayerBase Hacker = PlayerBase.Cast(hacker);
-		if(Hacker.GetIdentity()){
+		if (Hacker.GetIdentity()){
 			string Heading = heading;
 			string Message = text;
 			string Icon = "ExpansionCLExpanded/GUI/Images/hacking.paa";

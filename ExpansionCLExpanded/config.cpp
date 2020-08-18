@@ -207,18 +207,18 @@ class CfgVehicles
 			"tablef_off",
 			"screen",
 			"background",
-			"backscreen"
-			
-		
+			"backscreen",
+			"top"		
 		};
 		hiddenSelectionsTextures[] = 
 		{
-			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_on_ca.paa",
+			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_off_co.paa",
 			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_on_co.paa",
 			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_off_co.paa",
-			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_on_ca.paa",
-			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_on_co.paa",
-			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_on_co.paa"
+			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_off_co.paa",
+			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_off_co.paa",
+			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_off_co.paa",
+			"ExpansionCLExpanded\Data\textures\ECLE_Tablet_off_co.paa"
 			
 			
 			// added  texture to selection
@@ -247,6 +247,15 @@ class CfgVehicles
 				};
 			};*/
 		};
+		class AnimationSources
+        {
+            class top
+            {
+                source="user";
+                animPeriod=1.0;
+                initPhase=0;
+            };
+        };
 	};
 	class ECLETabletBattery: Battery9V
 	{
@@ -277,6 +286,7 @@ class CfgVehicles
 				};
 			};
 		};
+		
 	};
 };
 
