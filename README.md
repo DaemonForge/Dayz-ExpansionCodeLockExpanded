@@ -43,6 +43,6 @@ For anyone interested in repacking please read all this
 - 7th Must include the NOTICE file in side the mod with out modification to my text
 
 ### Credits
-Huge thanks to @Creep from the Modders discord for his help and work on the textures and updating the model for the tablets
-3D Model for the Tablet is from https://sketchfab.com/3d-models/tablet-320a95934b0d455e9affcf18859c9937
-3D Model for the Battery https://sketchfab.com/3d-models/micro-fission-battery-e514d9b7708742878d4cc45db9066da0
+- Huge thanks to @Creep from the Modders discord for his help and work on the textures and updating the model for the tablets
+- 3D Model for the Tablet is from https://sketchfab.com/3d-models/tablet-320a95934b0d455e9affcf18859c9937
+- 3D Model for the Battery https://sketchfab.com/3d-models/micro-fission-battery-e514d9b7708742878d4cc45db9066da0
