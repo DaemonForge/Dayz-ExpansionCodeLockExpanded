@@ -87,7 +87,6 @@ class ECLETablet extends ItemBase{
 	
 	
 	void StartHackServer(ItemBase hackingTarget, PlayerBase hacker){
-		SetAnimationPhase("top",1);
 		PlayerBase Hacker = PlayerBase.Cast(hacker);
 		ItemBase HackingTarget = ItemBase.Cast(hackingTarget);
 		if (Hacker && HackingTarget){
@@ -165,7 +164,6 @@ class ECLETablet extends ItemBase{
 					GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater(this.HackCompleted, 200, false, hackingTarget, Hacker);
 				}
 			} else {
-				SetAnimationPhase("top",0);
 				HackingTarget.ECLE_InterruptHack();
 				this.ECLE_InterruptHack();
 				m_HackingInterrupted = true;
@@ -179,7 +177,6 @@ class ECLETablet extends ItemBase{
 	}
 	
 	void HackCompleted(ItemBase hackingTarget, PlayerBase hacker){
-		SetAnimationPhase("top",0);
 		PlayerBase Hacker = PlayerBase.Cast(hacker);
 		BaseBuildingBase HackingTarget = BaseBuildingBase.Cast(hackingTarget);
 		float itemMaxHealth = 0;
@@ -204,7 +201,7 @@ class ECLETablet extends ItemBase{
 				if (Hacker.GetIdentity() && GetExpansionCodeLockConfig().ScriptLogging){
 					Print("[CodeLockExpanded][Raid] " + Hacker.GetIdentity().GetName() + "(" +  Hacker.GetIdentity().GetPlainId() + ") Hacked  " + tent.GetType() + " with ID: " + ECLE_GetHackID() + " at " + tent.GetPosition());
 				}
-				this.AddHealth("GlobalHealth", "Health", GetExpansionCodeLockConfig().TabletDamage);
+				this.AddHealth("GlobalHealth", "Health", GetExpansionCodeLockConfig().TabletDamageTents);
 				DestoryBatteries( GetExpansionCodeLockConfig().BatteriesTents );
 				
 				tent.ECLE_CompleteHack();
@@ -234,7 +231,7 @@ class ECLETablet extends ItemBase{
 				if (Hacker.GetIdentity() && GetExpansionCodeLockConfig().ScriptLogging){
 					Print("[CodeLockExpanded][Raid] " + Hacker.GetIdentity().GetName() + "(" +  Hacker.GetIdentity().GetPlainId() + ") Hacked  " + HackingTarget.GetType() + " with ID: " + ECLE_GetHackID() + " at " + HackingTarget.GetPosition());
 				}
-				this.AddHealth("", "Health", GetExpansionCodeLockConfig().TabletDamage);
+				this.AddHealth("GlobalHealth", "Health", GetExpansionCodeLockConfig().TabletDamageDoors);
 				DestoryBatteries( GetExpansionCodeLockConfig().BatteriesDoors );
 				
 				HackingTarget.ECLE_CompleteHack();
@@ -265,6 +262,10 @@ class ECLETablet extends ItemBase{
 		m_TabletONLocal = true;
 		if(!IsRuined()){
 			SetObjectTexture(0, "ExpansionCLExpanded\\Data\\textures\\ECLE_tablet_on_co.paa");
+			SetObjectTexture( GetHiddenSelectionIndex("zbytek"), "ExpansionCLExpanded\\Data\\textures\\ECLE_tablet_on_co.paa");
+			SetObjectTexture( GetHiddenSelectionIndex("tablet_on"), "ExpansionCLExpanded\\Data\\textures\\ECLE_tablet_on_co.paa");
+			SetObjectTexture( GetHiddenSelectionIndex("tablef_off"), "ExpansionCLExpanded\\Data\\textures\\ECLE_tablet_on_co.paa");
+			SetObjectTexture( GetHiddenSelectionIndex("top"), "ExpansionCLExpanded\\Data\\textures\\ECLE_tablet_on_co.paa");
 			SetObjectTexture( GetHiddenSelectionIndex("background"), "ExpansionCLExpanded\\Data\\textures\\ECLE_tablet_on_co.paa");
 			SetObjectTexture( GetHiddenSelectionIndex("screen"), "ExpansionCLExpanded\\Data\\textures\\ECLE_tablet_on_co.paa");
 			SetObjectTexture( GetHiddenSelectionIndex("backscreen"), "ExpansionCLExpanded\\Data\\textures\\ECLE_tablet_on_co.paa");
@@ -277,6 +278,10 @@ class ECLETablet extends ItemBase{
 		m_TabletONLocal = false;
 		if(!IsRuined()){
 			SetObjectTexture(0, "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_off_co.paa");
+			SetObjectTexture( GetHiddenSelectionIndex("zbytek"), "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_off_co.paa");
+			SetObjectTexture( GetHiddenSelectionIndex("tablet_on"), "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_off_co.paa");
+			SetObjectTexture( GetHiddenSelectionIndex("tablef_off"), "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_off_co.paa");
+			SetObjectTexture( GetHiddenSelectionIndex("top"), "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_off_co.paa");
 			SetObjectTexture( GetHiddenSelectionIndex("background"), "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_off_co.paa");
 			SetObjectTexture(GetHiddenSelectionIndex("screen"), "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_off_co.paa");
 			SetObjectMaterial( GetHiddenSelectionIndex("backscreen"), "ExpansionCLExpanded\\Data\\textures\\ECLE_Tablet_on.rvmat" );
