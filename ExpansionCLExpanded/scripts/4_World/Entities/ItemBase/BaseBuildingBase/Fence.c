@@ -114,6 +114,7 @@ modded class Fence extends BaseBuildingBase
 		ctx.Write( m_Locked );
 		ctx.Write( m_Code );
 		ctx.Write( m_HasCode );
+		ctx.Write( m_ECLE_HackID );
 	}
 
 
@@ -137,10 +138,13 @@ modded class Fence extends BaseBuildingBase
 		if ( !ctx.Read( m_HasCode ) )
 		{
 			return false;
+		}	
+		if ( !ctx.Read( m_ECLE_HackID ) )
+		{
+			m_ECLE_HackID = 0;
+			return false;
 		}
 		
-		SetSynchDirty();
-
 		return true;
 	}
 	
@@ -186,5 +190,4 @@ modded class Fence extends BaseBuildingBase
         }
 		super.OnPartDestroyedServer( player, part_name, action_id );
 	}
-
 }

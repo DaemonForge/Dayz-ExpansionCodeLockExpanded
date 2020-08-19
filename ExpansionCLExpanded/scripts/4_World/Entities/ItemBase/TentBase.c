@@ -218,6 +218,7 @@ modded class TentBase extends ItemBase
 		ctx.Write( m_IsOpened4 );
 		ctx.Write( m_IsOpened5 );
 		ctx.Write( m_IsOpened6 );
+		ctx.Write( m_ECLE_HackID );
 	}
 
 
@@ -286,7 +287,12 @@ modded class TentBase extends ItemBase
 		{
 			m_IsOpened6 = true;
 			loadingsuccessfull = false;
-		}	
+		}		
+		if ( !ctx.Read( m_ECLE_HackID ) )
+		{
+			m_ECLE_HackID = 0;
+			loadingsuccessfull = false;
+		}
 		
 		if (loadingsuccessfull && !GetExpansionCodeLockConfig().AllowCodeLocksOnTents){ //If Code Locks on the tents it will remove them Just calling later so simplify and ensure that the code lock has been created
 				GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater( this.ExpansionCodeLockRemove, 1000, false );

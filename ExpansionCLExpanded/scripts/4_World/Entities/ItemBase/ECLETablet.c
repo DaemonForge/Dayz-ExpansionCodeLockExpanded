@@ -297,6 +297,7 @@ class ECLETablet extends ItemBase{
 		ctx.Write( m_HackingCompleted );
 		ctx.Write( m_HackTimeRemaining );
 		ctx.Write( m_TabletON );
+		ctx.Write( m_ECLE_HackID );
 	}
 
 	
@@ -326,6 +327,11 @@ class ECLETablet extends ItemBase{
 		}
 		if ( !ctx.Read( m_TabletON ) )
 		{
+			loadingsuccessfull = false;
+		}
+		if ( !ctx.Read( m_ECLE_HackID ) )
+		{
+			m_ECLE_HackID = 0;
 			loadingsuccessfull = false;
 		}
 		
