@@ -18,15 +18,15 @@ class ExpansionCodeLockConfig
 	float HackStartTimeTents = 45;
 	float HackingTimeTents = 600;
 	int BatteriesTents = 1;
-	float TabletDamageTents = 10;
+	float TabletDamageTents = 15;
 	
 	bool AllowHackingDoors = true;
 	float HackStartTimeDoors = 90;
 	float HackingTimeDoors = 900;
 	int BatteriesDoors = 3;
-	float TabletDamageDoors = 25;
+	float TabletDamageDoors = 35;
 	
-	float ChanceOfInterrupt = 0.02;
+	float ChanceOfInterrupt = 0.01;
 	
 	bool ScriptLogging = true;
 		
@@ -68,14 +68,14 @@ class ExpansionCodeLockConfig
 					AllowHackingTents = true;
 					HackStartTimeTents = 45;
 					HackingTimeTents = 600;
-					TabletDamageTents = 10;
+					TabletDamageTents = 15;
 					
 					AllowHackingDoors = true;
-					HackStartTimeDoors = 120;
-					HackingTimeDoors = 1200;
+					HackStartTimeDoors = 90;
+					HackingTimeDoors = 900;
 					BatteriesDoors = 3;
-					TabletDamageDoors = 25;
-					ChanceOfInterrupt = 0.02;
+					TabletDamageDoors = 35;
+					ChanceOfInterrupt = 0.01;
 					JsonFileLoader<ExpansionCodeLockConfig>.JsonSaveFile(ExpansionCodeLockPATH, this);
 				}
 				

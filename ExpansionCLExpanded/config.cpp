@@ -193,8 +193,8 @@ class CfgVehicles
 	class ECLETablet: Inventory_Base
 	{
 		scope = 2;
-		displayName  = "Hacking Tablet";
-		descriptionShort  = "A Tablet Used for hacking code locks";
+		displayName  = "Decoder Tablet";
+		descriptionShort  = "A Tablet Used for hacking into buildings or tents protected by a code lock";
 		model = "ExpansionCLExpanded\Data\ECLE_Tablet.p3d"; // "/" was deleted at the begining of path 
 		itemSize[] = {3,2};
 		weight = 800;

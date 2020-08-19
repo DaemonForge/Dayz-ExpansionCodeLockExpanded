@@ -135,14 +135,14 @@ class ECLETablet extends ItemBase{
 			TentBase tent = TentBase.Cast(hackingTarget); 
 			BaseBuildingBase door = BaseBuildingBase.Cast(hackingTarget);
 			
-			if(door && CountBatteries() < GetExpansionCodeLockConfig().BatteriesDoors){
+			if (door && CountBatteries() < GetExpansionCodeLockConfig().BatteriesDoors){
 				m_HackingInterrupted = true;
 			}
-			if(tent && CountBatteries() < GetExpansionCodeLockConfig().BatteriesTents){
+			if (tent && CountBatteries() < GetExpansionCodeLockConfig().BatteriesTents){
 				m_HackingInterrupted = true;
 			}
 			
-			if(!HackingTarget.IsLocked()){
+			if (!HackingTarget.IsLocked()){
 				m_HackingInterrupted = true;
 			}
 			
@@ -155,9 +155,9 @@ class ECLETablet extends ItemBase{
 			
 			if (!m_HackingInterrupted && !HackingTarget.IsRuined() && vector.Distance(HackingTarget.GetPosition(), Hacker.GetPosition()) < 10 && Hacker.GetItemInHands() == this){
 				m_HackTimeRemaining = m_HackTimeRemaining - 2000;
-				if(m_HackTimeRemaining > 2000){
+				if (m_HackTimeRemaining > 2000){
 					GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater(this.CheckHackProgress, 2000, false, hackingTarget, Hacker);
-				}else if (m_HackTimeRemaining > 500){ //if its this close to finishing just finish
+				} else if (m_HackTimeRemaining > 500){ //if its this close to finishing just finish
 					GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater(this.CheckHackProgress, m_HackTimeRemaining, false, hackingTarget, Hacker);
 				} else {
 					m_HackTimeRemaining = 0; //incase it was made negitive
@@ -201,7 +201,7 @@ class ECLETablet extends ItemBase{
 				if (Hacker.GetIdentity() && GetExpansionCodeLockConfig().ScriptLogging){
 					Print("[CodeLockExpanded][Raid] " + Hacker.GetIdentity().GetName() + "(" +  Hacker.GetIdentity().GetPlainId() + ") Hacked  " + tent.GetType() + " with ID: " + ECLE_GetHackID() + " at " + tent.GetPosition());
 				}
-				this.AddHealth("GlobalHealth", "Health", GetExpansionCodeLockConfig().TabletDamageTents);
+				this.AddHealth("", "Health", -GetExpansionCodeLockConfig().TabletDamageTents);
 				DestoryBatteries( GetExpansionCodeLockConfig().BatteriesTents );
 				
 				tent.ECLE_CompleteHack();
@@ -231,7 +231,7 @@ class ECLETablet extends ItemBase{
 				if (Hacker.GetIdentity() && GetExpansionCodeLockConfig().ScriptLogging){
 					Print("[CodeLockExpanded][Raid] " + Hacker.GetIdentity().GetName() + "(" +  Hacker.GetIdentity().GetPlainId() + ") Hacked  " + HackingTarget.GetType() + " with ID: " + ECLE_GetHackID() + " at " + HackingTarget.GetPosition());
 				}
-				this.AddHealth("GlobalHealth", "Health", GetExpansionCodeLockConfig().TabletDamageDoors);
+				this.AddHealth("", "Health", -GetExpansionCodeLockConfig().TabletDamageDoors);
 				DestoryBatteries( GetExpansionCodeLockConfig().BatteriesDoors );
 				
 				HackingTarget.ECLE_CompleteHack();
