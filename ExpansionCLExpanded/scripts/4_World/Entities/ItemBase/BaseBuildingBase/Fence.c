@@ -114,7 +114,6 @@ modded class Fence extends BaseBuildingBase
 		ctx.Write( m_Locked );
 		ctx.Write( m_Code );
 		ctx.Write( m_HasCode );
-		ctx.Write( m_ECLE_HackID );
 	}
 
 
@@ -139,11 +138,6 @@ modded class Fence extends BaseBuildingBase
 		{
 			return false;
 		}	
-		if ( !ctx.Read( m_ECLE_HackID ) )
-		{
-			m_ECLE_HackID = 0;
-			return false;
-		}
 		
 		return true;
 	}

@@ -30,10 +30,11 @@ class ExpansionCodeLockConfig
 	
 	bool ScriptLogging = true;
 		
+	bool NEWSETUP_DONOTEDIT = true;
 	
 	void ExpansionCodeLockConfig()
 	{
-
+		
 	}
 	
 	// Load config file or create default file if config doesn't exsit
@@ -76,14 +77,29 @@ class ExpansionCodeLockConfig
 					BatteriesDoors = 3;
 					TabletDamageDoors = 35;
 					ChanceOfInterrupt = 0.01;
-					JsonFileLoader<ExpansionCodeLockConfig>.JsonSaveFile(ExpansionCodeLockPATH, this);
+					NEWSETUP_DONOTEDIT = true;
+					Save();
 				}
 				
 			}else{ //File does not exist create file
-				JsonFileLoader<ExpansionCodeLockConfig>.JsonSaveFile(ExpansionCodeLockPATH, this);
+				Save();
 			}
 		}
-	}	
+	}
+	
+	void Save(){
+		JsonFileLoader<ExpansionCodeLockConfig>.JsonSaveFile(ExpansionCodeLockPATH, this);
+	}
+	
+	bool NewSetup(){
+		return NEWSETUP_DONOTEDIT;
+	}
+	
+	void SetupComplete(){
+		Print("[ExpansionCodeLock] Running m_ExpansionCodeLockConfig SetupComplete");
+		NEWSETUP_DONOTEDIT = false;
+		Save();
+	}
 }
 
 

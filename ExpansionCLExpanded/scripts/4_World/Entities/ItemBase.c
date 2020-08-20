@@ -29,4 +29,27 @@ modded class ItemBase extends InventoryItem
 		m_ECLE_HackID = 0;
 		SetSynchDirty();
 	}
+	
+	override bool OnStoreLoad( ParamsReadContext ctx, int version )
+	{
+		if ( !super.OnStoreLoad( ctx, version ) )
+		{
+			return false;
+		}
+		if (!GetExpansionCodeLockConfig().NewSetup()){
+			if ( !ctx.Read( m_ECLE_HackID ) )
+			{
+				return false;
+			}		
+		}		
+		return true;
+	}
+	
+	override void OnStoreSave(ParamsWriteContext ctx)
+	{
+		super.OnStoreSave( ctx );
+		
+		ctx.Write( m_ECLE_HackID );
+	}
+
 }

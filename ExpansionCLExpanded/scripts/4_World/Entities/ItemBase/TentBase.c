@@ -218,7 +218,6 @@ modded class TentBase extends ItemBase
 		ctx.Write( m_IsOpened4 );
 		ctx.Write( m_IsOpened5 );
 		ctx.Write( m_IsOpened6 );
-		ctx.Write( m_ECLE_HackID );
 	}
 
 
@@ -229,72 +228,67 @@ modded class TentBase extends ItemBase
 			return false;
 		}
 		bool loadingsuccessfull = true;
-		if ( !ctx.Read( m_Locked ) )
-		{
-			m_Locked = false;
-			loadingsuccessfull = false;
-		}
-		
-		if ( !ctx.Read( m_Code ) )
-		{
-			m_Code = "";
-			loadingsuccessfull = false;
-		}
-
-		if ( !ctx.Read( m_HasCode ) )
-		{
-			m_HasCode = false;
-			loadingsuccessfull = false;
-		}
-		
-		if ( !ctx.Read( m_IsOpened ) )
-		{
-			m_IsOpened = true;
-			loadingsuccessfull = false;
-		}
-		
-		if ( !ctx.Read( m_IsOpened1 ) )
-		{
-			m_IsOpened1 = true;
-			loadingsuccessfull = false;
-		}
-		
-		if ( !ctx.Read( m_IsOpened2 ) )
-		{
-			m_IsOpened2 = true;
-			loadingsuccessfull = false;
-		}
-		
-		if ( !ctx.Read( m_IsOpened3 ) )
-		{
-			m_IsOpened3 = true;
-			loadingsuccessfull = false;
-		}
-		
-		if ( !ctx.Read( m_IsOpened4 ) )
-		{
-			m_IsOpened4 = true;
-			loadingsuccessfull = false;
-		}
+			if ( !ctx.Read( m_Locked ) )
+			{
+				m_Locked = false;
+				loadingsuccessfull = false;
+			}
 			
-		if ( !ctx.Read( m_IsOpened5 ) )
-		{
-			m_IsOpened5 = true;
-			loadingsuccessfull = false;
-		}
+			if ( !ctx.Read( m_Code ) )
+			{
+				m_Code = "";
+				loadingsuccessfull = false;
+			}
+
+			if ( !ctx.Read( m_HasCode ) )
+			{
+				m_HasCode = false;
+				loadingsuccessfull = false;
+			}
+			
+			if ( !ctx.Read( m_IsOpened ) )
+			{
+				m_IsOpened = true;
+				loadingsuccessfull = false;
+			}
+			
+			if ( !ctx.Read( m_IsOpened1 ) )
+			{
+				m_IsOpened1 = true;
+				loadingsuccessfull = false;
+			}
+			
+			if ( !ctx.Read( m_IsOpened2 ) )
+			{
+				m_IsOpened2 = true;
+				loadingsuccessfull = false;
+			}
+			
+			if ( !ctx.Read( m_IsOpened3 ) )
+			{
+				m_IsOpened3 = true;
+				loadingsuccessfull = false;
+			}
+			
+			if ( !ctx.Read( m_IsOpened4 ) )
+			{
+				m_IsOpened4 = true;
+				loadingsuccessfull = false;
+			}
+				
+			if ( !ctx.Read( m_IsOpened5 ) )
+			{
+				m_IsOpened5 = true;
+				loadingsuccessfull = false;
+			}
+			
+			if ( !ctx.Read( m_IsOpened6 ) )
+			{
+				m_IsOpened6 = true;
+				loadingsuccessfull = false;
+			}
 		
-		if ( !ctx.Read( m_IsOpened6 ) )
-		{
-			m_IsOpened6 = true;
-			loadingsuccessfull = false;
-		}		
-		if ( !ctx.Read( m_ECLE_HackID ) )
-		{
-			m_ECLE_HackID = 0;
-			loadingsuccessfull = false;
-		}
-		
-		if (loadingsuccessfull && !GetExpansionCodeLockConfig().AllowCodeLocksOnTents){ //If Code Locks on the tents it will remove them Just calling later so simplify and ensure that the code lock has been created
+		if ((loadingsuccessfull && !GetExpansionCodeLockConfig().AllowCodeLocksOnTents)){ //If Code Locks on the tents it will remove them Just calling later so simplify and ensure that the code lock has been created
 				GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater( this.ExpansionCodeLockRemove, 1000, false );
 		}
 		
@@ -304,7 +298,7 @@ modded class TentBase extends ItemBase
 	}
 	
 	void ExpansionCodeLockRemove(){
-		if (!GetExpansionCodeLockConfig().AllowCodeLocksOnTents){
+		if (!GetExpansionCodeLockConfig().AllowCodeLocksOnTents || GetExpansionCodeLockConfig().NewSetup()){
 			if (m_Locked || m_HasCode || HasCodeLock("codelock") ){
 				m_Locked = false;
 				m_Code = "";
