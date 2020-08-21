@@ -6,7 +6,7 @@ modded class ActionDialCombinationLockOnTarget: ActionContinuousBase
 			Fence building = Fence.Cast( target.GetObject() );
 			if ( building )
 			{
-				if ( building.HasCodeLock( "codelock" ) )
+				if ( building.ExpansionHasCodeLock( "codelock" ) )
 				{
 					return false;
 				}

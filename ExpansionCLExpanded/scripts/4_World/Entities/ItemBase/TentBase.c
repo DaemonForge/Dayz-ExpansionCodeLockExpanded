@@ -109,7 +109,7 @@ modded class TentBase extends ItemBase
 		return m_IsOpened;
 	}
 	
-	override bool IsOpenable()
+	override bool ExpansionIsOpenable()
 	{
 		return !m_IsOpened && !IsLocked();
 	}
@@ -174,7 +174,7 @@ modded class TentBase extends ItemBase
 		return m_HasCode;
 	}
 	
-	override bool HasCodeLock( string selection )
+	override bool ExpansionHasCodeLock( string selection )
 	{
 		if ( ExpansionCodeLock.Cast(FindAttachmentBySlotName( "Att_ExpansionCodeLock" )) )
 		{
@@ -183,12 +183,10 @@ modded class TentBase extends ItemBase
 		return false;
 	}
 
-	/* Not available till current experimental release
-	override ExpansionCodeLock GetCodeLock()
+	override ExpansionCodeLock ExpansionGetCodeLock()
 	{
 		return ExpansionCodeLock.Cast(FindAttachmentBySlotName( "Att_ExpansionCodeLock" ));
 	}
-	*/	
 
 	override bool IsLocked()
 	{
@@ -299,7 +297,7 @@ modded class TentBase extends ItemBase
 	
 	void ExpansionCodeLockRemove(){
 		if (!GetExpansionCodeLockConfig().AllowCodeLocksOnTents || GetExpansionCodeLockConfig().NewSetup()){
-			if (m_Locked || m_HasCode || HasCodeLock("codelock") ){
+			if (m_Locked || m_HasCode || ExpansionHasCodeLock("codelock") ){
 				m_Locked = false;
 				m_Code = "";
 				m_HasCode = false;

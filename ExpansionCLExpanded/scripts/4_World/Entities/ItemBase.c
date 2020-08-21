@@ -30,13 +30,14 @@ modded class ItemBase extends InventoryItem
 		SetSynchDirty();
 	}
 	
+	/*
 	override bool OnStoreLoad( ParamsReadContext ctx, int version )
 	{
 		if ( !super.OnStoreLoad( ctx, version ) )
 		{
 			return false;
 		}
-		if (!GetExpansionCodeLockConfig().NewSetup()){
+		if (!GetExpansionCodeLockConfig().NewSetup() && GetExpansionCodeLockConfig() == "5"){
 			if ( !ctx.Read( m_ECLE_HackID ) )
 			{
 				return false;
@@ -51,5 +52,5 @@ modded class ItemBase extends InventoryItem
 		
 		ctx.Write( m_ECLE_HackID );
 	}
-
+	*/
 }

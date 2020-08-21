@@ -5,7 +5,7 @@ static string ExpansionCodeLockPATH = "$profile:\\ExpansionCodeLockExpanded.json
 class ExpansionCodeLockConfig
 { 
 	//Default Values
-	string ConfigVersion = "4";
+	string ConfigVersion = "5";
 	bool AllowLockUnlockFromAnywhere = false;
 	bool AllowCodeLocksOnTents = true;
 	
@@ -30,7 +30,6 @@ class ExpansionCodeLockConfig
 	
 	bool ScriptLogging = true;
 		
-	bool NEWSETUP_DONOTEDIT = true;
 	
 	void ExpansionCodeLockConfig()
 	{
@@ -59,8 +58,8 @@ class ExpansionCodeLockConfig
 					JsonFileLoader<ExpansionCodeLockConfig>.JsonSaveFile(ExpansionCodeLockPATH, this);
 				}
 				
-				if (ConfigVersion == "3"){
-					ConfigVersion = "4";
+				if (ConfigVersion == "3" || ConfigVersion == "4" ){
+					ConfigVersion = "5";
 					AllowHacksawRaiding = false;
 					HacksawRaidTime = 600;
 					HacksawRaidIncrements = 5;
@@ -77,7 +76,6 @@ class ExpansionCodeLockConfig
 					BatteriesDoors = 3;
 					TabletDamageDoors = 35;
 					ChanceOfInterrupt = 0.01;
-					NEWSETUP_DONOTEDIT = true;
 					Save();
 				}
 				
@@ -92,13 +90,12 @@ class ExpansionCodeLockConfig
 	}
 	
 	bool NewSetup(){
-		return NEWSETUP_DONOTEDIT;
+		return false;
 	}
 	
 	void SetupComplete(){
 		Print("[ExpansionCodeLock] Running m_ExpansionCodeLockConfig SetupComplete");
-		NEWSETUP_DONOTEDIT = false;
-		Save();
+		//Save();
 	}
 }
 

@@ -26,7 +26,7 @@ modded class Fence extends BaseBuildingBase
 		return m_IsOpened;
 	}
 	
-	override bool IsOpenable()
+	override bool ExpansionIsOpenable()
 	{
 		return !m_IsOpened && !IsLocked();
 	}
@@ -81,22 +81,20 @@ modded class Fence extends BaseBuildingBase
 		return m_HasCode;
 	}
 	
-	override bool HasCodeLock( string selection )
+	override bool ExpansionHasCodeLock( string selection )
 	{
 		ExpansionCodeLock codelock = ExpansionCodeLock.Cast(FindAttachmentBySlotName( "Att_CombinationLock" )) ;
 		if ( codelock ) //check if attachment is code lock
 		{
 			return true;
 		}
-		return super.HasCodeLock( selection );
+		return super.ExpansionHasCodeLock( selection );
 	}
 
-	/* Not available till next experimental version
-	override ExpansionCodeLock GetCodeLock()
+	override ExpansionCodeLock ExpansionGetCodeLock()
 	{
 		return ExpansionCodeLock.Cast(FindAttachmentBySlotName( "Att_CombinationLock" ));
 	}
-	*/
 
 	override bool IsLocked()
 	{
@@ -174,7 +172,7 @@ modded class Fence extends BaseBuildingBase
                 Unlock();
             }
             SetCode("");
-			if (HasCodeLock("")){
+			if (ExpansionHasCodeLock("")){
 			 	ExpansionCodeLock codelock = ExpansionCodeLock.Cast(FindAttachmentBySlotName( "Att_CombinationLock" ));
 				if (codelock){
 					float health = codelock.GetHealth("", "");

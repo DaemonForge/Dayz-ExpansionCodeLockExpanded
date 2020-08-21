@@ -13,7 +13,7 @@ modded class ExpansionActionEnterCodeLock: ActionInteractBase
 			if ( m_Target )
 			{
 				string selection = m_Target.GetActionComponentName( target.GetComponentIndex() );
-				if (m_Target.HasCodeLock( selection ) && !m_Target.IsOpened()){
+				if (m_Target.ExpansionHasCodeLock( selection ) && !m_Target.IsOpened()){
 					return true;
 				} else if (m_Target.IsLocked() || (m_Target.HasCode() && !m_Target.IsOpened())){
 					return true;

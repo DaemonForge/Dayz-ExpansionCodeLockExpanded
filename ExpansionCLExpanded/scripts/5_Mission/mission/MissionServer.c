@@ -6,7 +6,7 @@ modded class MissionServer extends MissionBase
 		GetExpansionCodeLockConfig();
 		if(GetExpansionCodeLockConfig().NewSetup()){
 			Print("[ExpansionCodeLock] Calling m_ExpansionCodeLockConfig SetupComplete");
-			GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLaterByName(m_ExpansionCodeLockConfig, "SetupComplete", 660 * 1000, false); //Wait over 10 minutes just to be safe worst case is server stops before this and it doesn't finish the setup and hacking in progress won't be able to be resumed
+			GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLaterByName(m_ExpansionCodeLockConfig, "SetupComplete", 1200 * 1000, false); //Wait over 10 minutes just to be safe worst case is server stops before this and it doesn't finish the setup and hacking in progress won't be able to be resumed
 		}
 	}
 	

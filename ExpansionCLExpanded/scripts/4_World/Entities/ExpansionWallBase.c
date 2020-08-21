@@ -1,6 +1,6 @@
 modded class ExpansionWallBase extends ExpansionBaseBuilding
 {
-	override bool HasCodeLock( string selection )
+	override bool ExpansionHasCodeLock( string selection )
 	{
 		if (GetExpansionCodeLockConfig().AllowLockUnlockFromAnywhere){
 			if ( m_HasDoor && FindAttachmentBySlotName( "Att_ExpansionCodeLock_1" ) )
@@ -12,6 +12,6 @@ modded class ExpansionWallBase extends ExpansionBaseBuilding
 				return true;
 			}
 		}
-		return super.HasCodeLock(selection);
+		return super.ExpansionHasCodeLock(selection);
 	}
 }
