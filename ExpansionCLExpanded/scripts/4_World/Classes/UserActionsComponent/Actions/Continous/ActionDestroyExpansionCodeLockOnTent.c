@@ -3,7 +3,7 @@ class ActionDestroyExpansionCodeLockOnTentCB extends ActionContinuousBaseCB {
 		float circleTime = GetExpansionCodeLockConfig().HacksawRaidTime / GetExpansionCodeLockConfig().HacksawRaidIncrements; 
       	m_ActionData.m_ActionComponent = new CAContinuousRepeat(circleTime);
     }
-}
+};
 
 class ActionDestroyExpansionCodeLockOnTent : ActionContinuousBase {
     protected float m_Health;
@@ -83,4 +83,4 @@ class ActionDestroyExpansionCodeLockOnTent : ActionContinuousBase {
         }
 
     }
-}
+};

@@ -455,4 +455,4 @@ class ECLETablet extends ItemBase{
 		}
 	}
 	
-}
+};

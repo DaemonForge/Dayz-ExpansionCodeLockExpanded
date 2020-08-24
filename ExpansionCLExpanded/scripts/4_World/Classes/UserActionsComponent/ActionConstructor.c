@@ -9,4 +9,4 @@ modded class ActionConstructor
 		actions.Insert( ActionRemoveExpansionCodeLockExpanded );
 
 	}
-}
+};

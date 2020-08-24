@@ -97,7 +97,7 @@ class ExpansionCodeLockConfig
 		Print("[ExpansionCodeLock] Running m_ExpansionCodeLockConfig SetupComplete");
 		//Save();
 	}
-}
+};
 
 
 //Helper function to return Config
@@ -109,4 +109,4 @@ static ref ExpansionCodeLockConfig GetExpansionCodeLockConfig()
 		m_ExpansionCodeLockConfig.Load();
 	}
 	return m_ExpansionCodeLockConfig;
-}
+};

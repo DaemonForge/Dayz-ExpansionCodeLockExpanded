@@ -6,4 +6,4 @@ modded class Hacksaw extends ToolBase
 
         AddAction(ActionDestroyExpansionCodeLockOnTent);
     }
-}
+};

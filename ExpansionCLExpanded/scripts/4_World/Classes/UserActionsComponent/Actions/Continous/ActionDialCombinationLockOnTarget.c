@@ -16,4 +16,4 @@ modded class ActionDialCombinationLockOnTarget: ActionContinuousBase
 		return false;
 	}
 	
-}
+};

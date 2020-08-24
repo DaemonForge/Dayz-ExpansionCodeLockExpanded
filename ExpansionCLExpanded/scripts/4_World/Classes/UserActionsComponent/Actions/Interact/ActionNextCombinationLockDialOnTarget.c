@@ -15,4 +15,4 @@ modded class ActionNextCombinationLockDialOnTarget: ActionInteractBase
 		}
 		return false;
 	}
-}
+};

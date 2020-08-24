@@ -53,4 +53,4 @@ modded class ItemBase extends InventoryItem
 		ctx.Write( m_ECLE_HackID );
 	}
 	*/
-}
+};

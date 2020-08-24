@@ -335,4 +335,4 @@ modded class TentBase extends ItemBase
 			SetCode("");
 		}
 	}
-}
+};

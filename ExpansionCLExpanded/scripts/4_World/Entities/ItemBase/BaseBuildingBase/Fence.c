@@ -182,4 +182,4 @@ modded class Fence extends BaseBuildingBase
         }
 		super.OnPartDestroyedServer( player, part_name, action_id );
 	}
-}
+};

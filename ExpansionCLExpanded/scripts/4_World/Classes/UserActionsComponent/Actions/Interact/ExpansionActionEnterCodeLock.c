@@ -1,8 +1,5 @@
 modded class ExpansionActionEnterCodeLock: ActionInteractBase
 {
-	// -----------------------------------------------------------
-	// Override ActionCondition
-	// -----------------------------------------------------------
 	override bool ActionCondition( PlayerBase player, ActionTarget target, ItemBase item )
 	{
 		TentBase tent = TentBase.Cast( target.GetParent() );
@@ -24,4 +21,4 @@ modded class ExpansionActionEnterCodeLock: ActionInteractBase
 		
 		return super.ActionCondition( player, target, item );
 	}
-}
+};

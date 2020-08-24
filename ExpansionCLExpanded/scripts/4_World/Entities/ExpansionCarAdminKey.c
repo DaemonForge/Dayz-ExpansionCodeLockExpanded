@@ -1,13 +1,5 @@
 modded class ExpansionCarAdminKey extends ExpansionCarKey
-{
-	// ------------------------------------------------------------
-	// ExpansionCarAdminKey Constructor
-	// ------------------------------------------------------------
-	void ExpansionCarAdminKey()
-	{
-
-	}
-	
+{	
 	override void SetActions()
 	{
 		super.SetActions();
@@ -15,4 +7,4 @@ modded class ExpansionCarAdminKey extends ExpansionCarKey
         AddAction(ActionRemoveExpansionCodeLockExpanded);
     }
 	
-}
+};

@@ -3,7 +3,7 @@ class ActionRemoveExpansionCodeLockExpandedCB extends ActionContinuousBaseCB {
 		float circleTime = 10; 
       	m_ActionData.m_ActionComponent = new CAContinuousRepeat(circleTime);
     }
-}
+};
 
 class ActionRemoveExpansionCodeLockExpanded : ActionContinuousBase {
 
@@ -64,4 +64,4 @@ class ActionRemoveExpansionCodeLockExpanded : ActionContinuousBase {
 			}
 		}
     }
-}
+};

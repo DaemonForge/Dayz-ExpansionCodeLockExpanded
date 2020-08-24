@@ -22,4 +22,4 @@ modded class ExpansionActionChangeCodeLock: ActionInteractBase
 		
 		return super.ActionCondition( player, target, item );
 	}
-}
+};

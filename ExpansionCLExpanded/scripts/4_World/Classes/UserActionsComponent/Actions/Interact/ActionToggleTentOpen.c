@@ -24,4 +24,4 @@ modded class ActionToggleTentOpen : ActionInteractBase
 			}
 		}
 	}
-}
+};

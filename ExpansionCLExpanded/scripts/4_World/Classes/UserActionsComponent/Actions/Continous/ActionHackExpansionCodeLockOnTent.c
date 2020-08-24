@@ -3,7 +3,7 @@ class ActionHackExpansionCodeLockOnTentCB extends ActionContinuousBaseCB {
 		float circleTime = GetExpansionCodeLockConfig().HackStartTimeTents; 
       	m_ActionData.m_ActionComponent = new CAContinuousRepeat(circleTime);
     }
-}
+};
 
 class ActionHackExpansionCodeLockOnTent : ActionContinuousBase {
 
@@ -72,4 +72,4 @@ class ActionHackExpansionCodeLockOnTent : ActionContinuousBase {
             tablet.StartHackClient();
         }
 	}
-}
+};

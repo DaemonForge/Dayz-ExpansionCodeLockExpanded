@@ -3,7 +3,7 @@ class ActionHackExpansionCodeLockOnDoorCB extends ActionContinuousBaseCB {
 		float circleTime = GetExpansionCodeLockConfig().HackStartTimeDoors; 
       	m_ActionData.m_ActionComponent = new CAContinuousRepeat(circleTime);
     }
-}
+};
 
 class ActionHackExpansionCodeLockOnDoor : ActionContinuousBase {
 
@@ -72,4 +72,4 @@ class ActionHackExpansionCodeLockOnDoor : ActionContinuousBase {
             tablet.StartHackClient();
         }
 	}
-}
+};

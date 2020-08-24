@@ -14,4 +14,4 @@ modded class ExpansionWallBase extends ExpansionBaseBuilding
 		}
 		return super.ExpansionHasCodeLock(selection);
 	}
-}
+};
