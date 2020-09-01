@@ -1,9 +1,7 @@
-ref ExpansionCodeLockConfig m_ExpansionCodeLockConfig;
-
-static string ExpansionCodeLockPATH = "$profile:\\ExpansionCodeLockExpanded.json";
-
 class ExpansionCodeLockConfig
 { 
+	private static string ExpansionCodeLockPATH = "$profile:\\ExpansionCodeLockExpanded.json";
+	
 	//Default Values
 	string ConfigVersion = "5";
 	bool AllowLockUnlockFromAnywhere = false;
@@ -97,16 +95,4 @@ class ExpansionCodeLockConfig
 		Print("[ExpansionCodeLock] Running m_ExpansionCodeLockConfig SetupComplete");
 		//Save();
 	}
-};
-
-
-//Helper function to return Config
-static ref ExpansionCodeLockConfig GetExpansionCodeLockConfig()
-{
-	if (!m_ExpansionCodeLockConfig)
-	{
-		m_ExpansionCodeLockConfig = new ExpansionCodeLockConfig;
-		m_ExpansionCodeLockConfig.Load();
-	}
-	return m_ExpansionCodeLockConfig;
 };

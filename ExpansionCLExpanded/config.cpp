@@ -26,9 +26,18 @@ class CfgMods
         version="0.1";
         extra=0;
         type="mod";
-	    dependencies[]={ "World", "Mission"};
+	    dependencies[]={  "Game", "World", "Mission"};
 	    class defs
 	    {
+			class gameScriptModule
+            {
+				value = "";
+                files[]={
+					"ExpansionCLExpanded/scripts/Common",
+					"ExpansionCLExpanded/scripts/3_Game" 
+				};
+            };
+			
 			class worldScriptModule
             {
                 value="";
