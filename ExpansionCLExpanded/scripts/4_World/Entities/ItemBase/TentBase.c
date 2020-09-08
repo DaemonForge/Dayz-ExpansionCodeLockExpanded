@@ -65,13 +65,13 @@ modded class TentBase extends ItemBase
 		SetSynchDirty();
 	}
 	
-	override bool CanReceiveItemIntoCargo(EntityAI cargo) {
+	override bool CanReceiveItemIntoCargo(EntityAI item ) {
         if (m_Locked && GetExpansionCodeLockConfig()){
 			if (GetExpansionCodeLockConfig().AllowCodeLocksOnTents){
            	 	return false;
 			}
 		}
-        return super.CanReleaseCargo(cargo);
+        return super.CanReleaseCargo(item );
     }
 
 
