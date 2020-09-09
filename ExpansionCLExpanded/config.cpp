@@ -1,14 +1,9 @@
-#define _ARMA_
-
 class CfgPatches
 {
 	class ExpansionCLExpanded
 	{
-		units[]={};
-		weapons[]={};
 		requiredVersion=0.1;
 		requiredAddons[]={
-			"DZ_Data",
 			"DayZExpansion_Scripts"
 		};
 	};

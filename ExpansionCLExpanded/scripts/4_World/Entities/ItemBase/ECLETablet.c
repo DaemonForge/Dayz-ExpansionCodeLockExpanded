@@ -20,15 +20,6 @@ class ECLETablet extends ItemBase{
         AddAction(ActionHackExpansionCodeLockOnDoor);
     }
 
-	void ECLETablet(){
-		
-	}
-	
-	void ~ECLETablet()
-	{
-		
-	}
-
 	bool HasHackingStarted(){
 		return m_HackingStarted;
 	}
