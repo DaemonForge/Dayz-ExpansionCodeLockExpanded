@@ -12,14 +12,27 @@ class ECLETablet extends ItemBase{
 	
 	protected float m_HackTimeRemaining;
 		
+	protected float HackingRadius = 10;
+	
+	protected bool RequireInHands = true;
+	
 	override void SetActions()
 	{
 		super.SetActions();
 
-        AddAction(ActionHackExpansionCodeLockOnTent);
-        AddAction(ActionHackExpansionCodeLockOnDoor);
+        AddAction(ActionHackExpansion);
     }
 
+	void ECLETablet(){
+		
+	}
+	
+	void ~ECLETablet(){
+		if (m_HackingStarted && !m_HackingInterrupted && !m_HackingCompleted){ // to make less null pointers
+			GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).Remove(this.CheckHackProgress); 
+		}
+	}
+	
 	bool HasHackingStarted(){
 		return m_HackingStarted;
 	}
@@ -77,37 +90,39 @@ class ECLETablet extends ItemBase{
 	}
 	
 	
-	void StartHackServer(ItemBase hackingTarget, PlayerBase hacker){
-		PlayerBase Hacker = PlayerBase.Cast(hacker);
-		ItemBase HackingTarget = ItemBase.Cast(hackingTarget);
-		if (Hacker && HackingTarget){
+	void StartHackServer(ItemBase HackingTarget, PlayerBase Hacker){
+		PlayerBase hacker = PlayerBase.Cast(Hacker);
+		ItemBase hackingTarget = ItemBase.Cast(HackingTarget);
+		string heading = "HACK STARTED";
+		string resumed = " has started";
+		if (hacker && hackingTarget){
 			m_HackingCompleted = false;
 			m_HackingInterrupted = false;
 			
-			if ( HackingTarget.ECLE_GetHackID() != this.ECLE_GetHackID() || HackingTarget.ECLE_GetHackID() == 0){ //Starting A hack on a new object
+			if ( hackingTarget.ECLE_GetHackID() != this.ECLE_GetHackID() || hackingTarget.ECLE_GetHackID() == 0){ //Starting A hack on a new object
 				m_HackingStarted = true;
-				m_HackTimeRemaining = GetExpansionCodeLockConfig().HackingTimeTents * 1000;
-				
-				if( BaseBuildingBase.Cast(hackingTarget)){
-					m_HackTimeRemaining = GetExpansionCodeLockConfig().HackingTimeDoors * 1000;
-				}
+				m_HackTimeRemaining = GetExpansionCodeLockConfig().GetHackTime(hackingTarget.GetType()) * 1000;
 				
 				int HackID = GetGame().GetTime();
 				HackID = HackID * 10000;
-				HackID = HackID + Math.RandomInt(0,10000);
+				HackID = HackID + Math.RandomInt(0,9999);
 				this.ECLE_HackInit(HackID);
-				HackingTarget.ECLE_HackInit(HackID);
-				if (Hacker.GetIdentity() && GetExpansionCodeLockConfig().ScriptLogging){
-					Print("[CodeLockExpanded][Raid] " + Hacker.GetIdentity().GetName() + "(" +  Hacker.GetIdentity().GetPlainId() + ") has started hacking " + HackingTarget.GetType() + " with ID: " + HackID + " at " + HackingTarget.GetPosition());
+				hackingTarget.ECLE_HackInit(HackID);
+				if (hacker.GetIdentity() && GetExpansionCodeLockConfig().ScriptLogging){
+					Print("[CodeLockExpanded][Raid] " + hacker.GetIdentity().GetName() + "(" +  hacker.GetIdentity().GetPlainId() + ") has started hacking " + hackingTarget.GetType() + " with ID: " + HackID + " at " + hackingTarget.GetPosition());
 				}
+				GetGame().AdminLog("[CodeLockExpanded][Raid][ID:" + ECLE_GetHackID() + "] " + hacker.GetIdentity().GetName() + "(" +  hacker.GetIdentity().GetPlainId() + ") has started hacking " + hackingTarget.GetType() + " at " + hackingTarget.GetPosition());
 			} else {
 				this.ECLE_HackInit(ECLE_GetHackID());
-				HackingTarget.ECLE_HackInit(ECLE_GetHackID());
-				if (Hacker.GetIdentity() && GetExpansionCodeLockConfig().ScriptLogging){
-					Print("[CodeLockExpanded][Raid] " + Hacker.GetIdentity().GetName() + "(" +  Hacker.GetIdentity().GetPlainId() + ") has resumed hacking " + HackingTarget.GetType() + " with ID: " + ECLE_GetHackID() + " at " + HackingTarget.GetPosition());
+				hackingTarget.ECLE_HackInit(ECLE_GetHackID());
+				heading = "HACK RESUMED";
+				resumed = " has resumed";
+				if (hacker.GetIdentity() && GetExpansionCodeLockConfig().ScriptLogging){
+					Print("[CodeLockExpanded][Raid] " + hacker.GetIdentity().GetName() + "(" +  hacker.GetIdentity().GetPlainId() + ") has resumed hacking " + hackingTarget.GetType() + " with ID: " + ECLE_GetHackID() + " at " + hackingTarget.GetPosition());
 				}
+				GetGame().AdminLog("[CodeLockExpanded][Raid][ID:" + ECLE_GetHackID() + "] " + hacker.GetIdentity().GetName() + "(" +  hacker.GetIdentity().GetPlainId() + ") has resumed hacking " + hackingTarget.GetType() + " at " + hackingTarget.GetPosition());
 			}
-			SendPlayerMessage(Hacker, "Hack Started", "The hacking of " + hackingTarget.GetDisplayName() + " has started");
+			SendPlayerMessage(hacker, heading, "The hacking of " + hackingTarget.GetDisplayName() + resumed);
 			GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater(this.CheckHackProgress, 2000, false, hackingTarget, hacker);
 			SetSynchDirty();
 		}
@@ -118,47 +133,93 @@ class ECLETablet extends ItemBase{
 		SEffectManager.PlaySoundOnObject("defibrillator_ready_SoundSet", this);
 	}
 	
-	void CheckHackProgress(ItemBase hackingTarget, PlayerBase hacker){
-		PlayerBase Hacker = PlayerBase.Cast(hacker);
-		ItemBase HackingTarget = ItemBase.Cast(hackingTarget);
-		if (Hacker && HackingTarget){
-			
-			TentBase tent = TentBase.Cast(hackingTarget); 
-			BaseBuildingBase door = BaseBuildingBase.Cast(hackingTarget);
-			
-			if (door && CountBatteries() < GetExpansionCodeLockConfig().BatteriesDoors){
-				m_HackingInterrupted = true;
+	
+	bool CheckHackInterrupt(ItemBase HackingTarget, PlayerBase Hacker){
+		bool IsInterrupted = false;
+		PlayerBase hacker = PlayerBase.Cast(Hacker);
+		ItemBase hackingTarget = ItemBase.Cast(HackingTarget);
+		if (hacker && hackingTarget){
+            ExpansionCodeLock codelock = ExpansionCodeLock.Cast(hackingTarget.GetAttachmentByConfigTypeName("ExpansionCodeLock"));
+			ECLEHackableItem hackingData = GetExpansionCodeLockConfig().GetHackableItem( hackingTarget.GetType() );
+			bool hasCodeLock = false;
+			if (codelock){
+				hasCodeLock = true;
 			}
-			if (tent && CountBatteries() < GetExpansionCodeLockConfig().BatteriesTents){
-				m_HackingInterrupted = true;
-			}
+            if ( hasCodeLock && hackingData.Type != "" && !hackingData.IsSafe && !HackingTarget.IsLocked()) {
+				//Code Lock not locked
+				IsInterrupted = true;
+				GetGame().AdminLog("[CodeLockExpanded][Raid][ID:" + ECLE_GetHackID() + "] " + hacker.GetIdentity().GetName() + "(" +  hacker.GetIdentity().GetPlainId() + ") had their hacking of " + hackingTarget.GetType() + " at " + hackingTarget.GetPosition() + " Interrupted due to codelock being unlocked");
+			} 
+			if (!HackingTarget.IsLocked() && hackingData.Type != "" && hackingData.IsSafe){
+				//Code Lock not locked
+				IsInterrupted = true;
+				GetGame().AdminLog("[CodeLockExpanded][Raid][ID:" + ECLE_GetHackID() + "] " + hacker.GetIdentity().GetName() + "(" +  hacker.GetIdentity().GetPlainId() + ") had their hacking of " + hackingTarget.GetType() + " at " + hackingTarget.GetPosition() + " Interrupted due to safe being unlocked");
 			
-			if (!HackingTarget.IsLocked()){
-				m_HackingInterrupted = true;
+			} 
+			if ( !hasCodeLock && hackingData.Type != "" && !hackingData.IsSafe){ //Code Lock Removed
+				IsInterrupted = true;
+				GetGame().AdminLog("[CodeLockExpanded][Raid][ID:" + ECLE_GetHackID() + "] " + hacker.GetIdentity().GetName() + "(" +  hacker.GetIdentity().GetPlainId() + ") had their hacking of " + hackingTarget.GetType() + " at " + hackingTarget.GetPosition() + " Interrupted due to codelock missing");
 			}
-			
-			float DoInterrupt = Math.RandomFloat(0,1);
-			float InterruptChance = GetExpansionCodeLockConfig().ChanceOfInterrupt;
+			//Missing Batteries
+			if (!GetExpansionCodeLockConfig().CanHack( hackingTarget.GetType(), this.CountBatteries(), hasCodeLock)){
+				IsInterrupted = true;
+				GetGame().AdminLog("[CodeLockExpanded][Raid][ID:" + ECLE_GetHackID() + "] " + hacker.GetIdentity().GetName() + "(" +  hacker.GetIdentity().GetPlainId() + ") had their hacking of " + hackingTarget.GetType() + " at " + hackingTarget.GetPosition() + " Interrupted due to Missing Batteries");
+			}
+			//Random Chance Calcuations
+			float DoInterrupt = Math.RandomFloat(0,1000);
+			float InterruptChance = hackingData.ChanceOfInterrupt * 1000;
 			if (DoInterrupt < InterruptChance){
-				m_HackingInterrupted = true;
+				IsInterrupted = true;
+				GetGame().AdminLog("[CodeLockExpanded][Raid][ID:" + ECLE_GetHackID() + "] " + hacker.GetIdentity().GetName() + "(" +  hacker.GetIdentity().GetPlainId() + ") had their hacking of " + hackingTarget.GetType() + " at " + hackingTarget.GetPosition() + " Interrupted due to interrupt Chance");
 			}
-			
-			
-			if (!m_HackingInterrupted && !HackingTarget.IsRuined() && vector.Distance(HackingTarget.GetPosition(), Hacker.GetPosition()) < 10 && Hacker.GetItemInHands() == this){
+			//Tablet is in hands
+			if (hacker.GetItemInHands() != this && RequireInHands){
+				IsInterrupted = true;
+				GetGame().AdminLog("[CodeLockExpanded][Raid][ID:" + ECLE_GetHackID() + "] " + hacker.GetIdentity().GetName() + "(" +  hacker.GetIdentity().GetPlainId() + ") had their hacking of " + hackingTarget.GetType() + " at " + hackingTarget.GetPosition() + " Interrupted due to tablet dropped from hands");
+			}
+			//Hacker Left Radius
+			if (vector.Distance(hackingTarget.GetPosition(), hacker.GetPosition()) > HackingRadius){
+				IsInterrupted = true;
+				GetGame().AdminLog("[CodeLockExpanded][Raid][ID:" + ECLE_GetHackID() + "] " + hacker.GetIdentity().GetName() + "(" +  hacker.GetIdentity().GetPlainId() + ") had their hacking of " + hackingTarget.GetType() + " at " + hackingTarget.GetPosition() + " Interrupted due to Hacker Leaving the hacking radius");
+			}
+			//Tablet is ruined
+			if (this.IsRuined()){
+				IsInterrupted = true;
+				GetGame().AdminLog("[CodeLockExpanded][Raid][ID:" + ECLE_GetHackID() + "] " + hacker.GetIdentity().GetName() + "(" +  hacker.GetIdentity().GetPlainId() + ") had their hacking of " + hackingTarget.GetType() + " at " + hackingTarget.GetPosition() + " Interrupted due to Tablet Being Destroyed");
+			}
+			//Player has Disconnected
+			if (hacker.IsPlayerDisconnected()){
+				IsInterrupted = true;
+				GetGame().AdminLog("[CodeLockExpanded][Raid][ID:" + ECLE_GetHackID() + "] " + hacker.GetIdentity().GetName() + "(" +  hacker.GetIdentity().GetPlainId() + ") had their hacking of " + hackingTarget.GetType() + " at " + hackingTarget.GetPosition() + " Interrupted due to Player Disconected");
+			}
+		} else {
+			//This shouldn't happen, but Player and Target are inviald
+			IsInterrupted = true;
+			GetGame().AdminLog("[CodeLockExpanded][Raid][ID:" + ECLE_GetHackID() + "] " + hacker.GetIdentity().GetName() + "(" +  hacker.GetIdentity().GetPlainId() + ") had their hacking of " + hackingTarget.GetType() + " at " + hackingTarget.GetPosition() + " Interrupted due to invalid Target or Player");
+		}
+		return IsInterrupted;
+	}
+	
+	
+	void CheckHackProgress(ItemBase HackingTarget, PlayerBase Hacker){
+		ItemBase hackingTarget = ItemBase.Cast(HackingTarget);
+		PlayerBase hacker = PlayerBase.Cast(Hacker);
+		if (hackingTarget && hacker){
+           	m_HackingInterrupted = CheckHackInterrupt(hackingTarget, hacker);
+			if (!m_HackingInterrupted){
 				m_HackTimeRemaining = m_HackTimeRemaining - 2000;
 				if (m_HackTimeRemaining > 2000){
-					GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater(this.CheckHackProgress, 2000, false, hackingTarget, Hacker);
+					GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater(this.CheckHackProgress, 2000, false, hackingTarget, hacker);
 				} else if (m_HackTimeRemaining > 500){ //if its this close to finishing just finish
-					GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater(this.CheckHackProgress, m_HackTimeRemaining, false, hackingTarget, Hacker);
+					GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater(this.CheckHackProgress, m_HackTimeRemaining, false, hackingTarget, hacker);
 				} else {
 					m_HackTimeRemaining = 0; //incase it was made negitive
-					GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater(this.HackCompleted, 200, false, hackingTarget, Hacker);
+					GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater(this.HackCompleted, 200, false, hackingTarget, hacker);
 				}
 			} else {
-				HackingTarget.ECLE_InterruptHack();
+				hackingTarget.ECLE_InterruptHack();
 				this.ECLE_InterruptHack();
-				m_HackingInterrupted = true;
-				SendPlayerMessage(Hacker, "Hack Interrupted", "The hacking of " + hackingTarget.GetDisplayName() + " has been interrupted");
+				SendPlayerMessage(hacker, "HACK INTERRUPTED", "The hacking of " + hackingTarget.GetDisplayName() + " has been interrupted");
 			}
 		}else{
 			m_HackingStarted = false;
@@ -167,66 +228,39 @@ class ECLETablet extends ItemBase{
 		SetSynchDirty();
 	}
 	
-	void HackCompleted(ItemBase hackingTarget, PlayerBase hacker){
-		PlayerBase Hacker = PlayerBase.Cast(hacker);
-		BaseBuildingBase HackingTarget = BaseBuildingBase.Cast(hackingTarget);
+	void HackCompleted(ItemBase HackingTarget, PlayerBase Hacker){
+		PlayerBase hacker = PlayerBase.Cast(Hacker);
+		ItemBase hackingTarget = ItemBase.Cast(HackingTarget);
 		float itemMaxHealth = 0;
-		float toolDamage = GetExpansionCodeLockConfig().HackSawDamage;
-        TentBase tent = TentBase.Cast(hackingTarget); 
-        if (tent && Hacker) {
-            ExpansionCodeLock codelock = ExpansionCodeLock.Cast(tent.FindAttachmentBySlotName( "Att_ExpansionCodeLock" ));
-			
-            if (codelock ) {
-				itemMaxHealth = codelock.GetMaxHealth("", "Health");
-				itemMaxHealth++;
-				codelock.AddHealth("", "Health", -itemMaxHealth);
-				toolDamage++;
-                tent.Unlock();
-                tent.SetCode( "" );
-				tent.GetInventory().DropEntity(InventoryMode.SERVER, tent, codelock);
+        if (hackingTarget && hacker) {
+            ExpansionCodeLock codelock = ExpansionCodeLock.Cast(hackingTarget.GetAttachmentByConfigTypeName("ExpansionCodeLock"));
+			ECLEHackableItem hackingData = GetExpansionCodeLockConfig().GetHackableItem( hackingTarget.GetType());
+            if ( hackingData.Type != "") {
+				if (codelock){
+					itemMaxHealth = codelock.GetMaxHealth("", "Health");
+					itemMaxHealth++;
+					codelock.AddHealth("", "Health", -itemMaxHealth);
+					hackingTarget.GetInventory().DropEntity(InventoryMode.SERVER, hackingTarget, codelock);
+				}
+				
+                hackingTarget.Unlock();
+                hackingTarget.SetCode( "" );
+				
 				#ifdef HEROESANDBANDITSMOD
-					if (Hacker.GetIdentity()){
-						GetHeroesAndBandits().NewPlayerAction(Hacker.GetIdentity().GetPlainId(), "HackExpansionCodeLockDoorRaid");
+					if (hacker.GetIdentity()){
+						GetHeroesAndBandits().NewPlayerAction(hacker.GetIdentity().GetPlainId(), "Hack" + hackingData.Type + "Raid");
 					}
 				#endif
-				if (Hacker.GetIdentity() && GetExpansionCodeLockConfig().ScriptLogging){
-					Print("[CodeLockExpanded][Raid] " + Hacker.GetIdentity().GetName() + "(" +  Hacker.GetIdentity().GetPlainId() + ") Hacked  " + tent.GetType() + " with ID: " + ECLE_GetHackID() + " at " + tent.GetPosition());
+				if (hacker.GetIdentity() && GetExpansionCodeLockConfig().ScriptLogging){
+					Print("[HackingMod][Raid] " + hacker.GetIdentity().GetName() + "(" +  hacker.GetIdentity().GetPlainId() + ") Hacked  " + hackingTarget.GetType() + " with ID: " + ECLE_GetHackID() + " at " + hackingTarget.GetPosition());
 				}
-				this.AddHealth("", "Health", -GetExpansionCodeLockConfig().TabletDamageTents);
-				DestoryBatteries( GetExpansionCodeLockConfig().BatteriesTents );
+				GetGame().AdminLog("[HackingMod][Raid][ID:" + ECLE_GetHackID() + "] " + hacker.GetIdentity().GetName() + "(" +  hacker.GetIdentity().GetPlainId() + ") Hacked  " + hackingTarget.GetType() + " at " + hackingTarget.GetPosition());
+					
+				this.AddHealth("", "Health", -hackingData.TabletDamage);
+				DestoryBatteries( hackingData.Batteries );
 				
-				tent.ECLE_CompleteHack();
 				this.ECLE_CompleteHack();
-				
-				m_HackingStarted = false;
-				m_HackingInterrupted = false;
-				m_HackingCompleted = true;
-            }
-        }
-		if (HackingTarget && Hacker) {
-            ExpansionCodeLock codelock2 = ExpansionCodeLock.Cast(HackingTarget.GetAttachmentByConfigTypeName("ExpansionCodeLock"));
-			
-            if (codelock2 ) {
-				itemMaxHealth = codelock2.GetMaxHealth("", "Health");
-				itemMaxHealth++;
-				codelock2.AddHealth("", "Health", -itemMaxHealth);
-				toolDamage++;
-                HackingTarget.Unlock();
-                HackingTarget.SetCode( "" );
-				HackingTarget.GetInventory().DropEntity(InventoryMode.SERVER, HackingTarget, codelock2);
-				#ifdef HEROESANDBANDITSMOD
-					if (Hacker.GetIdentity()){
-						GetHeroesAndBandits().NewPlayerAction(Hacker.GetIdentity().GetPlainId(), "HackExpansionCodeLockTentRaid");
-					}
-				#endif
-				if (Hacker.GetIdentity() && GetExpansionCodeLockConfig().ScriptLogging){
-					Print("[CodeLockExpanded][Raid] " + Hacker.GetIdentity().GetName() + "(" +  Hacker.GetIdentity().GetPlainId() + ") Hacked  " + HackingTarget.GetType() + " with ID: " + ECLE_GetHackID() + " at " + HackingTarget.GetPosition());
-				}
-				this.AddHealth("", "Health", -GetExpansionCodeLockConfig().TabletDamageDoors);
-				DestoryBatteries( GetExpansionCodeLockConfig().BatteriesDoors );
-				
-				HackingTarget.ECLE_CompleteHack();
-				this.ECLE_CompleteHack();
+				hackingTarget.ECLE_CompleteHack();
 				
 				m_HackingStarted = false;
 				m_HackingInterrupted = false;
@@ -237,10 +271,11 @@ class ECLETablet extends ItemBase{
 			m_TabletON = false;
 		}
 		if (m_HackingCompleted){
-			SendPlayerMessage(Hacker, "Hack Finished", "The hacking of " + hackingTarget.GetDisplayName() + " has finished");
+			SendPlayerMessage(Hacker, "HACK FINISHED", "The hacking of " + hackingTarget.GetDisplayName() + " has finished");
 		}
 		SetSynchDirty();
 	}
+	
 	
 	override void EEHitBy(TotalDamageResult damageResult, int damageType, EntityAI source, int component, string dmgZone, string ammo, vector modelPos, float speedCoef)
 	{
@@ -347,6 +382,7 @@ class ECLETablet extends ItemBase{
 		ECLETabletBattery tempBattery2;
 		ECLETabletBattery tempBattery3;
 		ECLETabletBattery tempBattery4;
+		ECLETabletBattery tempBattery5;
 		
 		if (Class.CastTo(tempBattery1, FindAttachmentBySlotName("Att_ECLETabletBattery_1"))){
 			if (!tempBattery1.IsRuined()){
@@ -368,6 +404,11 @@ class ECLETablet extends ItemBase{
 				count++;
 			}
 		}
+		if (Class.CastTo(tempBattery5, FindAttachmentBySlotName("Att_ECLETabletBattery_5"))){
+			if (!tempBattery4.IsRuined()){
+				count++;
+			}
+		}
 		return count;
 	}
 	
@@ -377,7 +418,17 @@ class ECLETablet extends ItemBase{
 		ECLETabletBattery tempBattery2;
 		ECLETabletBattery tempBattery3;
 		ECLETabletBattery tempBattery4;
+		ECLETabletBattery tempBattery5;
 		
+		if (Class.CastTo(tempBattery5, FindAttachmentBySlotName("Att_ECLETabletBattery_5"))){
+			if (!tempBattery5.IsRuined()){
+				tempBattery5.AddHealth("", "Health", -21);
+				count++;
+			}
+			if (count >= number){
+				return;
+			}
+		}
 		if (Class.CastTo(tempBattery4, FindAttachmentBySlotName("Att_ECLETabletBattery_4"))){
 			if (!tempBattery4.IsRuined()){
 				tempBattery4.AddHealth("", "Health", -21);
@@ -418,7 +469,7 @@ class ECLETablet extends ItemBase{
 	
 	override void EEItemAttached(EntityAI item, string slot_name){
 		super.EEItemAttached(item, slot_name);
-		if (GetGame().IsServer() && (slot_name == "Att_ECLETabletBattery_1" || slot_name == "Att_ECLETabletBattery_2" || slot_name == "Att_ECLETabletBattery_3" || slot_name == "Att_ECLETabletBattery_4")){
+		if (GetGame().IsServer() && (slot_name == "Att_ECLETabletBattery_1" || slot_name == "Att_ECLETabletBattery_2" || slot_name == "Att_ECLETabletBattery_3" || slot_name == "Att_ECLETabletBattery_4" || slot_name == "Att_ECLETabletBattery_5")){
 			m_TabletON = true;
 			SetSynchDirty();
 		}
@@ -427,7 +478,7 @@ class ECLETablet extends ItemBase{
 	override void EEItemDetached(EntityAI item, string slot_name)
 	{
 		super.EEItemDetached(item, slot_name);
-		if (GetGame().IsServer() && (slot_name == "Att_ECLETabletBattery_1" || slot_name == "Att_ECLETabletBattery_2" || slot_name == "Att_ECLETabletBattery_3"  || slot_name == "Att_ECLETabletBattery_4" )){
+		if (GetGame().IsServer() && (slot_name == "Att_ECLETabletBattery_1" || slot_name == "Att_ECLETabletBattery_2" || slot_name == "Att_ECLETabletBattery_3"  || slot_name == "Att_ECLETabletBattery_4"  || slot_name == "Att_ECLETabletBattery_5")){
 			if (CountBatteries() == 0){
 				m_TabletON = false;
 				SetSynchDirty();

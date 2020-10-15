@@ -35,6 +35,15 @@ modded class TentBase extends ItemBase
 		AddAction( ExpansionActionChangeCodeLock );
 	}
 	
+	void ECLEResetLifeTime(){
+		if (GetGame().IsServer() && GetExpansionCodeLockConfig().ResetLifeTimeOnOpen){
+			float OldLifeTime = GetLifetime();
+			float MaxLifetime = GetLifetimeMax();
+			this.SetLifetime(MaxLifetime);
+			float NewLifeTime = GetLifetime();
+		}
+	}
+	
 	void ToggleTentOpening(string state){
 		if (state == "entrancec"){ //toggleing an closed door so it would now be open
 			m_IsOpened = true;
@@ -61,6 +70,9 @@ modded class TentBase extends ItemBase
 			} else {
 				m_IsOpened = false;
 			}
+		}
+		if (m_IsOpened){
+			ECLEResetLifeTime();
 		}
 		SetSynchDirty();
 	}

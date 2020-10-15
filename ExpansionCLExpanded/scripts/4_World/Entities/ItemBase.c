@@ -37,7 +37,7 @@ modded class ItemBase extends InventoryItem
 		{
 			return false;
 		}
-		if (!GetExpansionCodeLockConfig().NewSetup() && GetExpansionCodeLockConfig() == "5"){
+		if (!GetExpansionCodeLockConfig().NewSetup()){
 			if ( !ctx.Read( m_ECLE_HackID ) )
 			{
 				return false;

@@ -83,6 +83,13 @@ class CfgSlots
 		selection = "att_ECLETabletBattery";
 		ghostIcon = "batteryd";
 	};
+	class Slot_Att_ECLETabletBattery_5
+	{
+		name = "Att_ECLETabletBattery_5";
+		displayName = "Tablet Battery";
+		selection = "att_ECLETabletBattery";
+		ghostIcon = "batteryd";
+	};
 };
 class CfgVehicles
 {
@@ -203,7 +210,7 @@ class CfgVehicles
 		itemSize[] = {3,2};
 		weight = 800;
 		rotationFlags = 1;
-		attachments[] = {"Att_ECLETabletBattery_1", "Att_ECLETabletBattery_2", "Att_ECLETabletBattery_3","Att_ECLETabletBattery_4"};
+		attachments[] = {"Att_ECLETabletBattery_1", "Att_ECLETabletBattery_2", "Att_ECLETabletBattery_3","Att_ECLETabletBattery_4","Att_ECLETabletBattery_5"};
 		hiddenSelections[] = 
 		{        
 			"zbytek",
@@ -270,7 +277,7 @@ class CfgVehicles
 		itemSize[] = {1,1};
 		weight = 100;
 		rotationFlags = 1;
-		inventorySlot[] = {"Att_ECLETabletBattery_1", "Att_ECLETabletBattery_2", "Att_ECLETabletBattery_3","Att_ECLETabletBattery_4"};
+		inventorySlot[] = {"Att_ECLETabletBattery_1", "Att_ECLETabletBattery_2", "Att_ECLETabletBattery_3","Att_ECLETabletBattery_4","Att_ECLETabletBattery_5"};
 		hiddenSelections[] = 
 		{        
 			"zbytek"
