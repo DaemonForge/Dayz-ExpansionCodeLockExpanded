@@ -4,6 +4,7 @@ class CfgPatches
 	{
 		requiredVersion=0.1;
 		requiredAddons[]={
+			"ECLEDefines",
 			"DayZExpansion_Scripts"
 		};
 	};
@@ -28,7 +29,6 @@ class CfgMods
             {
 				value = "";
                 files[]={
-					"ExpansionCLExpanded/scripts/Common",
 					"ExpansionCLExpanded/scripts/3_Game" 
 				};
             };
@@ -37,7 +37,6 @@ class CfgMods
             {
                 value="";
                 files[]={ 
-					"ExpansionCLExpanded/scripts/Common",
 					"ExpansionCLExpanded/scripts/4_World" 
 				};
             };
@@ -46,7 +45,6 @@ class CfgMods
             {
                 value="";
                 files[]={
-					"ExpansionCLExpanded/scripts/Common",
 					"ExpansionCLExpanded/scripts/5_Mission" 
 				};
             };
@@ -100,7 +98,7 @@ class CfgVehicles
 	
 	class MediumTent: Container_Base
 	{
-		attachments[] = {"CamoNet","Lights","Att_ExpansionCodeLock"};
+		attachments[] = {"CamoNet", "Lights", "Att_ExpansionCodeLock"};
 		class GUIInventoryAttachmentsProps
 		{
 			class Attachments

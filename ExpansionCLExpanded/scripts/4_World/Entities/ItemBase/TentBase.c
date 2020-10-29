@@ -41,6 +41,7 @@ modded class TentBase extends ItemBase
 			float MaxLifetime = GetLifetimeMax();
 			this.SetLifetime(MaxLifetime);
 			float NewLifeTime = GetLifetime();
+			GetCEApi().RadiusLifetimeReset(GetPosition(),6);
 		}
 	}
 	

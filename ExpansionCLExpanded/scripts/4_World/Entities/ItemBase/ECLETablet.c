@@ -405,7 +405,7 @@ class ECLETablet extends ItemBase{
 			}
 		}
 		if (Class.CastTo(tempBattery5, FindAttachmentBySlotName("Att_ECLETabletBattery_5"))){
-			if (!tempBattery4.IsRuined()){
+			if (!tempBattery5.IsRuined()){
 				count++;
 			}
 		}
@@ -475,8 +475,7 @@ class ECLETablet extends ItemBase{
 		}
 	}
 	
-	override void EEItemDetached(EntityAI item, string slot_name)
-	{
+	override void EEItemDetached(EntityAI item, string slot_name){
 		super.EEItemDetached(item, slot_name);
 		if (GetGame().IsServer() && (slot_name == "Att_ECLETabletBattery_1" || slot_name == "Att_ECLETabletBattery_2" || slot_name == "Att_ECLETabletBattery_3"  || slot_name == "Att_ECLETabletBattery_4"  || slot_name == "Att_ECLETabletBattery_5")){
 			if (CountBatteries() == 0){

@@ -17,7 +17,7 @@ class ActionHackExpansion : ActionContinuousBase {
 
 	bool continueHack = false;
 	bool isSafe = false;
-    void ActionHackExpansionCodeLock() {
+    void ActionHackExpansion() {
         m_CallbackClass = ActionHackExpansionCB;
         m_StanceMask = DayZPlayerConstants.STANCEMASK_CROUCH;
         m_CommandUID = DayZPlayerConstants.CMD_ACTIONFB_INTERACT;
@@ -54,6 +54,8 @@ class ActionHackExpansion : ActionContinuousBase {
 					if ( GetExpansionCodeLockConfig().CanHack( hacking_target.GetType(), tablet.CountBatteries(), hasCodeLock) ) {
 						if (!hasCodeLock){
 							isSafe = true;
+						} else {
+							isSafe = false;
 						}
 						return true;
 					}
@@ -62,6 +64,8 @@ class ActionHackExpansion : ActionContinuousBase {
 					if ( GetExpansionCodeLockConfig().CanHack( hacking_target.GetType(), tablet.CountBatteries(), hasCodeLock )) {
 						if (!hasCodeLock){
 							isSafe = true;
+						} else {
+							isSafe = false;
 						}
 						return true;
 					}
